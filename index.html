@@ -1,35 +1,48 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <title>みんなのナンプレ</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>みんなのナンプレ｜脳トレ会</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div id="opening">
-        <h1>みんなのナンプレ</h1>
-        <button id="startBtn">スタート</button>
-    </div>
 
-    <div id="difficulty" style="display:none;">
-        <h2>難易度を選んでね</h2>
-        <button class="levelBtn" data-level="easy">かんたん</button>
-        <button class="levelBtn" data-level="normal">ふつう</button>
-        <button class="levelBtn" data-level="hard">むずかしい</button>
-        <button class="levelBtn" data-level="expert">東大脳</button>
-    </div>
+<!-- オープニング -->
+<img id="logo" src="logo.png" alt="脳トレ会ロゴ">
+<div id="title">脳トレ会</div>
+<img id="nampure" src="nampure.png" alt="みんなでナンプレ">
 
-    <div id="game" style="display:none;">
-        <div id="board"></div>
-        <button id="checkBtn">チェック</button>
-        <div id="message"></div>
-        <div id="status">
-            <p>クリア数: <span id="clearCount">0</span></p>
-            <p>称号: <span id="title">初心者</span></p>
-            <p>星: <span id="stars"></span></p>
-        </div>
-    </div>
+<!-- メインメニュー -->
+<div id="main-menu">
+  <h1>モード選択</h1>
+  <div id="mode-buttons">
+    <button class="menu-button" onclick="showSheets('easy')">かんたん</button>
+    <button class="menu-button" onclick="showSheets('normal')">ふつう</button>
+    <button class="menu-button" onclick="showSheets('hard')">むずかしい</button>
+    <button class="menu-button" onclick="showSheets('toudai')">東大脳</button>
+    <button class="menu-button" id="stanford-btn" onclick="showSheets('stanford')" disabled>🔓スタンフォード脳</button>
+  </div>
+  <div id="status-area">
+    <p>クリア数: <span id="clear-count">0</span> ／ 脳: <span id="brain-count">0</span></p>
+    <p>称号: <span id="rank">初心者</span></p>
+  </div>
+</div>
 
-    <script src="script.js"></script>
+<!-- シート選択 -->
+<div id="sheet-list"></div>
+
+<!-- ゲーム画面 -->
+<div id="game-screen" style="display:none;">
+  <div id="timer">タイマー：0秒</div>
+  <div id="board"></div>
+  <div id="palette"></div>
+  <button onclick="submitAnswer()">提出する</button>
+  <button onclick="giveUp()">あきらめる</button>
+  <div id="result-message"></div>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
