@@ -1,42 +1,126 @@
 body {
-    font-family: sans-serif;
-    text-align: center;
-    margin: 0;
-    padding: 20px;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+  background: #e0f7fa;
+  text-align: center;
+  overflow-x: hidden;
+}
+
+/* オープニングアニメ */
+#logo, #title, #nampure {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 1s ease;
+}
+
+#logo {
+  top: -200px;
+  width: 40vw;
+  max-width: 250px;
+}
+
+#title {
+  top: 60vh;
+  font-size: 7vw;
+  color: white;
+  -webkit-text-stroke: 2px #0077cc;
+  font-weight: bold;
+  left: -50%;
+}
+
+#nampure {
+  top: 110vh;
+  width: 90vw;
+  max-width: 450px;
+  opacity: 0;
+}
+
+/* メインメニュー */
+#main-menu {
+  display: none;
+  padding-top: 25vh;
+}
+
+.menu-button {
+  display: block;
+  margin: 10px auto;
+  padding: 10px 20px;
+  font-size: 5vw;
+  border: none;
+  border-radius: 10px;
+  background-color: #b3e5fc;
+  color: #004d80;
+  width: 70vw;
+  max-width: 300px;
+}
+
+#status-area {
+  margin-top: 20px;
+  font-size: 4vw;
+}
+
+#sheet-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 20px 10px;
+}
+
+.sheet-button {
+  margin: 5px;
+  padding: 15px;
+  font-size: 4vw;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 38vw;
+  max-width: 160px;
+  position: relative;
+}
+
+.stars {
+  display: block;
+  font-size: 3vw;
+  margin-top: 5px;
+}
+
+/* ゲーム画面 */
+#game-screen {
+  padding: 20px;
 }
 
 #board {
-    display: grid;
-    grid-template-columns: repeat(9, 30px);
-    grid-gap: 2px;
-    justify-content: center;
-    margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 2px;
+  max-width: 90vw;
+  margin: 20px auto;
 }
 
 #board input {
-    width: 28px;
-    height: 28px;
-    text-align: center;
-    font-size: 16px;
+  width: 9vw;
+  height: 9vw;
+  text-align: center;
+  font-size: 4vw;
+  max-width: 50px;
+  max-height: 50px;
 }
 
-button {
-    margin: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
+#palette {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
 }
 
-#message {
-    margin: 20px;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-#status {
-    margin-top: 20px;
-}
-
-.star {
-    font-size: 24px;
-    color: gold;
+#palette button {
+  margin: 5px;
+  width: 8vw;
+  height: 8vw;
+  font-size: 4vw;
+  max-width: 45px;
+  max-height: 45px;
+  border-radius: 50%;
 }
