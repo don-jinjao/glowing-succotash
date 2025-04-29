@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>みんなのナンプレ</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="opening">
+        <h1>みんなのナンプレ</h1>
+        <button id="startBtn">スタート</button>
+    </div>
+
+    <div id="difficulty" style="display:none;">
+        <h2>難易度を選んでね</h2>
+        <button class="levelBtn" data-level="easy">かんたん</button>
+        <button class="levelBtn" data-level="normal">ふつう</button>
+        <button class="levelBtn" data-level="hard">むずかしい</button>
+        <button class="levelBtn" data-level="expert">東大脳</button>
+    </div>
+
+    <div id="game" style="display:none;">
+        <div id="board"></div>
+        <button id="checkBtn">チェック</button>
+        <div id="message"></div>
+        <div id="status">
+            <p>クリア数: <span id="clearCount">0</span></p>
+            <p>称号: <span id="title">初心者</span></p>
+            <p>星: <span id="stars"></span></p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
