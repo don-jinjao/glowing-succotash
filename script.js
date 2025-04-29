@@ -7,7 +7,6 @@ let selectedCell = null;
 let timer = 0;
 let timerInterval;
 let currentAnswer = [];
-let currentPuzzle = [];
 let currentSheetId = "";
 
 // オープニング → メニュー遷移
@@ -16,10 +15,10 @@ window.onload = function () {
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
   const mainMenu = document.getElementById("main-menu");
+  const banner = document.getElementById("weekly-update-banner");
 
-  if (!logo || !title || !nampure || !mainMenu) {
-    console.error("初期要素の取得に失敗しました。HTML構造を確認してください。");
-    return;
+  if (new Date().getDay() === 1) {
+    banner.style.display = "block";
   }
 
   setTimeout(() => { logo.style.top = "20vh"; }, 500);
@@ -52,98 +51,82 @@ window.onload = function () {
   }, 14000);
 };
 
+// シート表示
 function showSheets(level) {
-  const sheetList = document.getElementById("sheet-list");
-  sheetList.innerHTML = "";
-  sheetList.style.display = "flex";
-
-  for (let i = 1; i <= 10; i++) {
-    const id = `${level}_${i}`;
-    const btn = document.createElement("button");
+  const list = document.getElementById("sheet-list");
+  list.innerHTML = "";
+  const week = Math.floor(Date.now() / (1000 * 60 * 60 * 24 * 7));
+  for (let i = 0; i < 10; i++) {
+    let id = `${level}_${(week + i) % 100}`;
+    let btn = document.createElement("button");
     btn.className = "sheet-button";
-    btn.innerHTML = `No.${i}<span class="stars">${clearedSheets[id] || ""}</span>`;
+    let stars = clearedSheets[id] || "";
+    btn.innerHTML = `No.${i + 1}<span class="stars">${stars}</span>`;
     btn.onclick = () => startGame(level, id);
-    sheetList.appendChild(btn);
+    list.appendChild(btn);
   }
-
-  document.getElementById("main-menu").style.display = "none";
 }
 
+// ゲームスタート
 function startGame(level, id) {
-  currentSheetId = id;
-  currentAnswer = generateAnswer();
-  currentPuzzle = makePuzzleFromAnswer(currentAnswer, 30);
-
-  const board = document.getElementById("board");
-  board.innerHTML = "";
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const td = document.createElement("td");
-      td.dataset.row = r;
-      td.dataset.col = c;
-      if (currentPuzzle[r][c]) {
-        td.textContent = currentPuzzle[r][c];
-        td.classList.add("fixed");
-      }
-      td.onclick = () => {
-        if (td.classList.contains("fixed")) return;
-        document.querySelectorAll("td").forEach(cell => cell.classList.remove("selected"));
-        td.classList.add("selected");
-        selectedCell = td;
-      };
-      board.appendChild(td);
-    }
-  }
-
   document.getElementById("main-menu").style.display = "none";
   document.getElementById("sheet-list").style.display = "none";
   document.getElementById("game-screen").style.display = "block";
+  currentSheetId = id;
+  currentAnswer = getFixedAnswer();
+  createBoard(currentAnswer);
   showPalette();
   startTimer();
 }
 
-function generateAnswer() {
-  const a = Array.from({ length: 9 }, () => Array(9).fill(0));
-  let num = 1;
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      a[i][j] = (i * 3 + Math.floor(i / 3) + j) % 9 + 1;
-    }
-  }
-  return a;
+// 仮固定問題データ
+function getFixedAnswer() {
+  return [
+    [5,3,4,6,7,8,9,1,2],
+    [6,7,2,1,9,5,3,4,8],
+    [1,9,8,3,4,2,5,6,7],
+    [8,5,9,7,6,1,4,2,3],
+    [4,2,6,8,5,3,7,9,1],
+    [7,1,3,9,2,4,8,5,6],
+    [9,6,1,5,3,7,2,8,4],
+    [2,8,7,4,1,9,6,3,5],
+    [3,4,5,2,8,6,1,7,9]
+  ];
 }
 
-function makePuzzleFromAnswer(answer, clues = 30) {
-  const puzzle = answer.map(row => row.slice());
-  let removed = 81 - clues;
-  while (removed > 0) {
-    const r = Math.floor(Math.random() * 9);
-    const c = Math.floor(Math.random() * 9);
-    if (puzzle[r][c] !== null) {
-      puzzle[r][c] = null;
-      removed--;
+function createBoard(answer) {
+  const board = document.getElementById("board");
+  board.innerHTML = "";
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const input = document.createElement("input");
+      input.maxLength = 1;
+      input.dataset.row = r;
+      input.dataset.col = c;
+      if (Math.random() < 0.5) {
+        input.value = answer[r][c];
+        input.disabled = true;
+        input.classList.add("fixed");
+      }
+      input.onclick = () => selectedCell = input;
+      board.appendChild(input);
     }
   }
-  return puzzle;
 }
 
 function showPalette() {
-  const palette = document.getElementById("palette");
-  palette.innerHTML = "";
+  const p = document.getElementById("palette");
+  p.innerHTML = "";
   for (let i = 1; i <= 9; i++) {
-    const btn = document.createElement("button");
-    btn.textContent = i;
-    btn.onclick = () => {
-      if (selectedCell) selectedCell.textContent = i;
-    };
-    palette.appendChild(btn);
+    const b = document.createElement("button");
+    b.textContent = i;
+    b.onclick = () => { if (selectedCell && !selectedCell.disabled) selectedCell.value = i; };
+    p.appendChild(b);
   }
-  const erase = document.createElement("button");
-  erase.textContent = "消";
-  erase.onclick = () => {
-    if (selectedCell) selectedCell.textContent = "";
-  };
-  palette.appendChild(erase);
+  const eraser = document.createElement("button");
+  eraser.textContent = "消";
+  eraser.onclick = () => { if (selectedCell && !selectedCell.disabled) selectedCell.value = ""; };
+  p.appendChild(eraser);
 }
 
 function startTimer() {
@@ -154,42 +137,22 @@ function startTimer() {
     document.getElementById("timer").textContent = `タイマー：${timer}秒`;
   }, 1000);
 }
-
 function stopTimer() {
   clearInterval(timerInterval);
 }
 
-function getCurrentBoard() {
-  const board = Array.from({ length: 9 }, () => Array(9).fill(null));
-  document.querySelectorAll("td").forEach(cell => {
-    const r = parseInt(cell.dataset.row);
-    const c = parseInt(cell.dataset.col);
-    board[r][c] = cell.textContent ? parseInt(cell.textContent) : null;
-  });
-  return board;
-}
-
 function submitAnswer() {
   stopTimer();
-  const board = getCurrentBoard();
-  let allFilled = true;
-  let allCorrect = true;
-
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const cell = document.querySelector(`td[data-row="${r}"][data-col="${c}"]`);
-      if (!board[r][c]) {
-        allFilled = false;
-        cell.classList.add("miss");
-      } else if (board[r][c] !== currentAnswer[r][c]) {
-        allCorrect = false;
-        cell.classList.add("miss");
-      }
+  let correct = true;
+  const inputs = document.querySelectorAll("#board input");
+  for (let i = 0; i < 81; i++) {
+    if (!inputs[i].value || isNaN(inputs[i].value)) {
+      correct = false;
     }
   }
 
   const msg = document.getElementById("result-message");
-  if (allFilled && allCorrect) {
+  if (correct) {
     msg.textContent = "君は天才だ！";
     clearCount++;
     brainCount++;
@@ -212,7 +175,6 @@ function saveStatus() {
   localStorage.setItem("brainCount", brainCount);
   localStorage.setItem("clearedSheets", JSON.stringify(clearedSheets));
 }
-
 function updateStatus() {
   document.getElementById("clear-count").textContent = clearCount;
   document.getElementById("brain-count").textContent = brainCount;
@@ -223,7 +185,6 @@ function updateStatus() {
   if (clearCount >= 30) rank = "伝説のナンプレ王";
   document.getElementById("rank").textContent = rank;
 }
-
 function checkStanfordUnlock() {
   const btn = document.getElementById("stanford-btn");
   if (brainCount >= 50) {
