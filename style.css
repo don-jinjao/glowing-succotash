@@ -40,7 +40,7 @@ body {
 /* メインメニュー */
 #main-menu {
   display: none;
-  padding-top: 20vh;
+  padding-top: 25vh;
 }
 
 .menu-button {
@@ -61,71 +61,77 @@ body {
   font-size: 4vw;
 }
 
-/* シート一覧 */
-#sheet-selection {
-  display: none;
-  padding-top: 10vh;
+#status-area p {
+  margin: 5px 0;
+  font-weight: bold;
 }
-#sheet-title {
-  font-size: 5vw;
+
+#status-area span {
+  font-weight: normal;
+  color: #0077cc;
 }
+
 #sheet-list {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin: 10px;
+  margin: 20px 10px;
 }
+
 .sheet-button {
   margin: 5px;
-  padding: 10px;
+  padding: 15px;
   font-size: 4vw;
-  width: 40vw;
+  border-radius: 10px;
+  border: none;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  width: 38vw;
   max-width: 160px;
+  position: relative;
 }
-#back-to-menu {
-  margin-top: 20px;
-  font-size: 4vw;
+
+.stars {
+  display: block;
+  font-size: 3vw;
+  margin-top: 5px;
 }
 
 /* ゲーム画面 */
 #game-screen {
-  display: none;
-  padding: 10px;
+  padding: 20px;
 }
-#game-board table {
-  margin: auto;
-  border-collapse: collapse;
-}
-td {
-  width: 9vw; height: 9vw;
-  min-width: 30px; min-height: 30px;
-  max-width: 50px; max-height: 50px;
-  border: 1px solid #999;
-  text-align: center; vertical-align: middle; font-size: 4vw;
-  background: #fff9f0;
-  line-height: 9vw;
-}
-td.fixed { background: #ddd; font-weight: bold; }
-td.selected { background: #b3e5fc !important; }
-td.error { background: #fbb; }
-td.miss { background: #fffb91; }
-td.block-border-top { border-top: 2px solid black; }
-td.block-border-left { border-left: 2px solid black; }
-td.block-border-right { border-right: 2px solid black; }
-td.block-border-bottom { border-bottom: 2px solid black; }
 
-#palette { margin-top: 10px; }
-.palette-row { display: flex; justify-content: center; margin-bottom: 5px; }
-.palette-button {
-  width: 9vw; height: 9vw; margin: 2px; font-size: 4vw;
-  min-width: 30px; min-height: 30px; max-width: 50px; max-height: 50px;
-  text-align: center; line-height: 9vw; border-radius: 50%;
+#board {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr);
+  gap: 2px;
+  max-width: 90vw;
+  margin: 20px auto;
 }
-.palette-button.erase {
-  font-size: 3vw;
-  width: 10vw; height: 10vw;
-  min-width: 35px; min-height: 35px;
-  max-width: 55px; max-height: 55px;
-  text-align: center; line-height: 10vw;
+
+#board input {
+  width: 9vw;
+  height: 9vw;
+  text-align: center;
+  font-size: 4vw;
+  max-width: 50px;
+  max-height: 50px;
+}
+
+#palette {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+#palette button {
+  margin: 5px;
+  width: 8vw;
+  height: 8vw;
+  font-size: 4vw;
+  max-width: 45px;
+  max-height: 45px;
   border-radius: 50%;
 }
