@@ -18,11 +18,11 @@
 <div id="main-menu">
   <h1>モード選択</h1>
   <div id="mode-buttons">
-    <button class="menu-button" onclick="showSheets('easy')">かんたん</button>
-    <button class="menu-button" onclick="showSheets('normal')">ふつう</button>
-    <button class="menu-button" onclick="showSheets('hard')">むずかしい</button>
-    <button class="menu-button" onclick="showSheets('toudai')">東大脳</button>
-    <button class="menu-button" id="stanford-btn" onclick="showSheets('stanford')" disabled>🔓スタンフォード脳</button>
+    <button class="menu-button" onclick="goToSheets('easy')">かんたん</button>
+    <button class="menu-button" onclick="goToSheets('normal')">ふつう</button>
+    <button class="menu-button" onclick="goToSheets('hard')">むずかしい</button>
+    <button class="menu-button" onclick="goToSheets('toudai')">東大脳</button>
+    <button class="menu-button" id="stanford-btn" onclick="goToSheets('stanford')" disabled>🔓スタンフォード脳</button>
   </div>
   <div id="status-area">
     <p>クリア数: <span id="clear-count">0</span> ／ 脳: <span id="brain-count">0</span></p>
@@ -30,13 +30,17 @@
   </div>
 </div>
 
-<!-- シート選択 -->
-<div id="sheet-list"></div>
+<!-- シート選択ページ -->
+<div id="sheet-selection">
+  <h2 id="sheet-title">シート選択</h2>
+  <div id="sheet-list"></div>
+  <button id="back-to-menu" onclick="backToMenu()">← 戻る</button>
+</div>
 
 <!-- ゲーム画面 -->
-<div id="game-screen" style="display:none;">
+<div id="game-screen">
   <div id="timer">タイマー：0秒</div>
-  <div id="board"></div>
+  <div id="game-board"></div>
   <div id="palette"></div>
   <button onclick="submitAnswer()">提出する</button>
   <button onclick="giveUp()">あきらめる</button>
