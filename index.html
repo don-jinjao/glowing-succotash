@@ -5,10 +5,71 @@
   <title>みんなのナンプレ｜脳トレ会</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
-  <script src="script.js" defer></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <h1>だみー index.html</h1>
+
+<!-- オープニング -->
+<img id="logo" src="logo.png.PNG" alt="脳トレ会ロゴ">
+<div id="title">脳トレ会</div>
+<img id="nampure" src="nampure.png.PNG" alt="みんなでナンプレ">
+
+<!-- 星の説明ボタン -->
+<button id="explain-button" onclick="toggleExplanation()">★？</button>
+<div id="explanation-popup" style="display:none;">
+  <h3>星・脳の取得条件</h3>
+  <ul>
+    <li>⭐️3：3分以内にクリア</li>
+    <li>⭐️2：提出時にミスなしでクリア</li>
+    <li>⭐️1：クリアできればOK</li>
+    <li>🧠（天才脳）：
+      <ul>
+        <li>「むずかしい」モードで⭐️3取得時に🧠1個</li>
+        <li>「東大脳」はクリアで🧠1個、星に応じて追加🧠</li>
+      </ul>
+    </li>
+    <li>スタンフォード脳は🧠50個で開放</li>
+  </ul>
+</div>
+
+<!-- メインメニュー -->
+<div id="main-menu">
+  <h1>モード選択</h1>
+  <div id="mode-buttons">
+    <button class="menu-button" onclick="showSheets('easy')">かんたん</button>
+    <button class="menu-button" onclick="showSheets('normal')">ふつう</button>
+    <button class="menu-button" onclick="showSheets('hard')">むずかしい</button>
+    <button class="menu-button" onclick="showSheets('toudai')">東大脳</button>
+    <button class="menu-button" id="stanford-btn" onclick="showSheets('stanford')" disabled>🔓スタンフォード脳</button>
+  </div>
+  <div id="status-area">
+    <p>星取得数: <span id="clear-count">0</span> ／ 天才脳: <span id="brain-count">0</span></p>
+    <p>称号: <span id="rank">初心者</span></p>
+  </div>
+  <div id="update-notice">次の盤面更新まで：あと<span id="days-left"></span>日</div>
+</div>
+
+<!-- シート選択 -->
+<div id="sheet-list">
+  <button id="back-to-menu" onclick="returnToMenu()">← 難易度選択にもどる</button>
+  <div id="sheet-buttons"></div>
+</div>
+
+<!-- ゲーム画面 -->
+<div id="game-screen" style="display:none;">
+  <div id="timer">タイマー：0秒</div>
+  <div id="game-board"></div>
+  <div id="palette"></div>
+  <button id="submit">提出する</button>
+  <button id="giveup">あきらめる</button>
+  <div id="result-message"></div>
+</div>
+
+<!-- あきらめたときの演出 -->
+<div id="giveup-screen" style="display:none;">
+  <h2>また挑戦してな！</h2>
+</div>
+
+<script src="script.js"></script>
 </body>
 </html>
