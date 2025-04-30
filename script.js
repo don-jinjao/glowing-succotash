@@ -1,4 +1,4 @@
-let puzzles = generatePuzzles(); // 仮の10枚（後に100枚に差替え予定）
+let puzzles = generatePuzzles(); // 10枚仮生成（100枚に拡張可）
 let currentMode = "";
 let currentSheet = 0;
 let startTime = 0;
@@ -6,35 +6,10 @@ let selectedCell = null;
 let starsData = JSON.parse(localStorage.getItem("starsData") || "{}");
 let brainCount = parseInt(localStorage.getItem("brainCount") || "0");
 
-window.onload = function () {
-  // オープニング演出
-  const logo = document.getElementById('logo');
-  const title = document.getElementById('title');
-  const nampure = document.getElementById('nampure');
-  const mainMenu = document.getElementById('mode-select');
-
-  setTimeout(() => { logo.style.top = '20vh'; }, 500);
-  setTimeout(() => { logo.style.transition = 'top 0.3s ease'; logo.style.top = '22vh'; }, 2800);
-  setTimeout(() => { logo.style.transition = 'top 0.3s ease'; logo.style.top = '20vh'; }, 3200);
-  setTimeout(() => { logo.style.transition = 'transform 0.8s ease'; logo.style.transform += ' rotate(45deg)'; }, 4000);
-  setTimeout(() => { title.style.left = '50%'; title.style.transform = 'translateX(-50%)'; }, 5000);
-  setTimeout(() => { logo.style.opacity = '0'; title.style.opacity = '0'; }, 7200);
-  setTimeout(() => {
-    logo.style.display = 'none';
-    title.style.display = 'none';
-    nampure.style.top = '30vh';
-    nampure.style.opacity = '1';
-  }, 9200);
-  setTimeout(() => {
-    nampure.style.transition = 'top 1s ease, opacity 1s ease';
-    nampure.style.top = '-100vh';
-    nampure.style.opacity = '0';
-  }, 12500);
-  setTimeout(() => {
-    nampure.style.display = 'none';
-    mainMenu.style.display = 'block';
-    updateBrainUI();
-  }, 14000);
+window.onload = () => {
+  document.getElementById("opening").style.display = "none";
+  document.getElementById("mode-select").style.display = "block";
+  updateBrainUI();
 };
 
 function selectMode(mode) {
@@ -48,7 +23,7 @@ function selectMode(mode) {
 function loadSheetButtons() {
   const container = document.getElementById("sheet-list");
   container.innerHTML = "";
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < puzzles.length; i++) {
     const btn = document.createElement("div");
     btn.className = "sheet-button";
     btn.textContent = i + 1;
@@ -128,23 +103,6 @@ function placeNumber(num) {
   if (!selectedCell) return;
   selectedCell.cell.textContent = num;
   selectedCell.cell.dataset.value = num;
-  validateBoard();
-}
-
-function validateBoard() {
-  const board = document.querySelectorAll("#sudoku-board td");
-  board.forEach(c => c.classList.remove("error"));
-
-  for (let r = 0; r < 9; r++) {
-    for (let c = 0; c < 9; c++) {
-      const cell = board[r * 9 + c];
-      const val = parseInt(cell.textContent);
-      if (!val) continue;
-      if (!isValid(puzzles[currentSheet], r, c, val)) {
-        cell.classList.add("error");
-      }
-    }
-  }
 }
 
 function checkAnswer() {
@@ -174,12 +132,12 @@ function checkAnswer() {
     result.className = "fail";
   }
 }
-
 function giveUp() {
   document.getElementById("result").textContent = "また挑戦してな";
   document.getElementById("game-screen").style.display = "none";
   document.getElementById("mode-select").style.display = "block";
 }
+
 function isValid(puzzle, row, col, val) {
   for (let i = 0; i < 9; i++) {
     if (i !== col && parseInt(document.querySelector(`#sudoku-board tr:nth-child(${row + 1}) td:nth-child(${i + 1})`).textContent) === val) return false;
@@ -218,15 +176,18 @@ function handleSuccess() {
 }
 
 function updateBrainUI() {
-  document.getElementById("brain-count").textContent = `🧠${brainCount}`;
-  const title = document.getElementById("title-name");
+  document.getElementById("brain-count").textContent = brainCount;
+  document.getElementById("total-brains").textContent = brainCount;
 
+  let totalStars = 0;
+  for (const key in starsData) totalStars += starsData[key];
+  document.getElementById("total-stars").textContent = totalStars;
+
+  const title = document.getElementById("current-title");
   if (brainCount >= 50) {
+    title.textContent = "脳神";
     document.getElementById("stanford-btn").disabled = false;
-  }
-
-  if (brainCount >= 50) title.textContent = "脳神";
-  else if (brainCount >= 30) title.textContent = "覚醒者";
+  } else if (brainCount >= 30) title.textContent = "覚醒者";
   else if (brainCount >= 15) title.textContent = "集中マスター";
   else if (brainCount >= 5) title.textContent = "挑戦者";
   else title.textContent = "初心者";
@@ -239,7 +200,9 @@ function toggleStarInfo() {
 
 function generatePuzzles() {
   return [
-    [[5,3,null,null,7,null,null,null,null],[6,null,null,1,9,5,null,null,null],[null,9,8,null,null,null,null,6,null],[8,null,null,null,6,null,null,null,3],[4,null,null,8,null,3,null,null,1],[7,null,null,null,2,null,null,null,6],[null,6,null,null,null,null,2,8,null],[null,null,null,4,1,9,null,null,5],[null,null,null,null,8,null,null,7,9]],
+    [[5,3,null,null,7,null,null,null,null],[6,null,null,1,9,5,null,null,null],[null,9,8,null,null,null,null,6,null],
+    [8,null,null,null,6,null,null,null,3],[4,null,null,8,null,3,null,null,1],[7,null,null,null,2,null,null,null,6],
+    [null,6,null,null,null,null,2,8,null],[null,null,null,4,1,9,null,null,5],[null,null,null,null,8,null,null,7,9]],
     [[...Array(9)].map(_=>Array(9).fill(null))], [[...Array(9)].map(_=>Array(9).fill(null))],
     [[...Array(9)].map(_=>Array(9).fill(null))], [[...Array(9)].map(_=>Array(9).fill(null))],
     [[...Array(9)].map(_=>Array(9).fill(null))], [[...Array(9)].map(_=>Array(9).fill(null))],
