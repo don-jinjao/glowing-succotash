@@ -2,54 +2,55 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>みんなのナンプレ｜脳トレ会</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
+  <!-- Opening -->
   <div id="opening">
-    <img src="logo.png.PNG" alt="ロゴ" id="logo" />
-    <h1>みんなのナンプレ｜脳トレ会</h1>
+    <img id="logo" src="logo.png.PNG" alt="ロゴ">
+    <div id="title">脳トレ会</div>
+    <img id="nampure" src="nampure.png.PNG" alt="ナンプレ画像">
   </div>
 
-  <div id="mode-select" class="menu-screen">
-    <h2>難易度を選んでください</h2>
+  <!-- Mode Select -->
+  <div id="mode-select">
+    <h1>モードを選んでください</h1>
     <button onclick="selectMode('easy')">かんたん</button>
     <button onclick="selectMode('normal')">ふつう</button>
     <button onclick="selectMode('hard')">むずかしい</button>
     <button onclick="selectMode('toudai')">東大脳</button>
-    <button id="stanford-btn" onclick="selectMode('stanford')" disabled>スタンフォード脳</button>
-    <div id="stanford-unlock-note">🧠50個で解放されます</div>
+    <button id="stanford-btn" onclick="selectMode('stanford')" disabled>スタンフォード脳（🧠50で解放）</button>
+    <div id="title-name">初心者</div>
+    <div id="brain-count">🧠0</div>
   </div>
 
-  <div id="sheet-select" class="menu-screen">
-    <button onclick="backToMode()">← 戻る</button>
-    <h2 id="sheet-title">シートを選んでください</h2>
+  <!-- Sheet Select -->
+  <div id="sheet-select">
+    <h2 id="sheet-title">◯◯モードのシート選択</h2>
     <div id="sheet-list"></div>
-    <div id="countdown">あと7日</div>
-    <button id="star-info" onclick="toggleStarInfo()">⭐️の解説</button>
+    <div id="countdown">盤面のアップデートまであと7日！</div>
+    <button onclick="toggleStarInfo()">⭐️の評価基準</button>
     <div id="star-info-popup" style="display:none;">
-      ⭐️3：3分以内にクリア<br/>
-      ⭐️2：ミスなしでクリア<br/>
-      ⭐️1：とにかくクリア<br/>
-      🧠：むずかしいで⭐️3／東大脳クリアで獲得
+      ⭐️3：3分以内にクリア<br />
+      ⭐️2：ミスなしでクリア<br />
+      ⭐️1：とにかくクリア<br />
+      🧠：難しい⭐️3、または東大脳でクリア
     </div>
+    <button onclick="backToMode()">← 戻る</button>
   </div>
 
+  <!-- Game Screen -->
   <div id="game-screen">
-    <h2 id="game-title"></h2>
+    <h2 id="game-title">シート X</h2>
+    <div id="elapsed-time"></div>
     <table id="sudoku-board"></table>
     <div id="number-buttons"></div>
-    <div id="game-buttons">
-      <button onclick="checkAnswer()">答え合わせ</button>
-      <button onclick="giveUp()">あきらめる</button>
-    </div>
+    <button onclick="checkAnswer()">提出する</button>
+    <button onclick="giveUp()">あきらめる</button>
     <div id="result"></div>
-  </div>
-
-  <div id="status">
-    <div>脳：<span id="brain-count">0</span>個</div>
-    <div>称号：<span id="title-name">初心者</span></div>
   </div>
 
   <script src="script.js"></script>
