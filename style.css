@@ -1,30 +1,150 @@
 body {
   font-family: sans-serif;
-  background-color: #e0f7fa;
   text-align: center;
-  padding: 20px;
+  background: #fefefe;
+  margin: 0;
+  padding: 0;
 }
-table {
+
+#opening {
+  animation: fadeIn 2s;
+  margin-top: 50px;
+}
+
+#logo {
+  width: 100px;
+  animation: bounce 1.5s infinite;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-15px); }
+}
+
+.menu-screen {
+  display: none;
+  margin-top: 40px;
+}
+
+button {
+  font-size: 1.2em;
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  background-color: #4285f4;
+  color: white;
+}
+
+#sheet-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  margin: 20px auto;
+  max-width: 500px;
+}
+
+.sheet-button {
+  padding: 10px;
+  border: 2px solid #aaa;
+  border-radius: 6px;
+  width: 60px;
+  height: 60px;
+  font-size: 1.1em;
+  position: relative;
+}
+
+.sheet-button .stars, .sheet-button .brains {
+  font-size: 0.9em;
+  display: block;
+  margin-top: 4px;
+}
+
+#sudoku-board {
   border-collapse: collapse;
-  margin: 0 auto;
+  margin: 20px auto;
 }
-td {
+
+#sudoku-board td {
   width: 40px;
   height: 40px;
+  border: 1px solid #aaa;
+  font-size: 1.2em;
   text-align: center;
   vertical-align: middle;
-  border: 1px solid #333;
-  font-size: 20px;
+  cursor: pointer;
 }
-td.fixed {
-  background: #ddd;
+
+#sudoku-board td.block-border {
+  border-width: 2px;
+}
+
+#sudoku-board td.selected {
+  background-color: #ccf2ff;
+}
+
+#sudoku-board td.error {
+  background-color: #ffc4c4;
+}
+
+#number-buttons {
+  margin: 10px;
+}
+
+#number-buttons button {
+  margin: 3px;
+  width: 35px;
+  height: 35px;
+  font-size: 1em;
+}
+
+#result {
+  margin-top: 15px;
+  font-size: 1.4em;
   font-weight: bold;
 }
-td.selected {
-  background: #b3e5fc;
+
+#result.success {
+  color: green;
+  animation: sparkle 1s ease-in-out;
 }
-#palette button {
-  margin: 5px;
+
+#result.fail {
+  color: red;
+}
+
+@keyframes sparkle {
+  0% { transform: scale(1); opacity: 0.3; }
+  50% { transform: scale(1.3); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+#status {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  font-size: 0.9em;
+  background: #eee;
+  padding: 5px 10px;
+  border-radius: 6px;
+}
+
+#star-info-popup {
+  background: #fffbe6;
+  border: 1px solid #ccc;
   padding: 10px;
-  font-size: 18px;
+  margin: 10px auto;
+  max-width: 300px;
+  font-size: 0.9em;
+  border-radius: 8px;
+}
+
+#countdown {
+  font-size: 1.2em;
+  font-weight: bold;
+  border: 2px dashed orange;
+  padding: 5px;
+  display: inline-block;
+  margin-top: 10px;
 }
