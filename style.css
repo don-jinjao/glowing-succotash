@@ -1,15 +1,95 @@
 body {
-  font-family: sans-serif;
   margin: 0;
-  background: #e0f7fa;
+  font-family: 'Orbitron', sans-serif;
+  background-color: #e0f7fa;
   text-align: center;
 }
 
-#opening {
-  background: #e0f7fa;
-  height: 100vh;
-  overflow: hidden;
+h1, h2 {
+  color: #0077cc;
+}
+
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border-radius: 10px;
+  background-color: #b3e5fc;
+  border: none;
+  font-size: 1.2em;
+  cursor: pointer;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.sheet-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+  justify-items: center;
+  margin: 20px auto;
+  max-width: 300px;
+}
+
+.sheet-button {
+  width: 120px;
+  height: 70px;
+  background-color: #e0f2f1;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
   position: relative;
+  box-shadow: 1px 1px 4px rgba(0,0,0,0.2);
+}
+
+.stars {
+  font-size: 0.8em;
+  color: gold;
+}
+
+.brains {
+  font-size: 1.2em;
+  position: absolute;
+  bottom: 5px;
+  right: 8px;
+}
+
+#sudoku-board {
+  margin: 20px auto;
+  border-collapse: collapse;
+}
+
+#sudoku-board td {
+  width: 40px;
+  height: 40px;
+  border: 1px solid #aaa;
+  font-size: 20px;
+  text-align: center;
+}
+
+#sudoku-board td.fixed {
+  background-color: #ddd;
+  font-weight: bold;
+}
+
+#sudoku-board td.selected {
+  background-color: #b3e5fc;
+}
+
+#sudoku-board td.error {
+  background-color: #ffcdd2;
+  border: 2px solid red;
+}
+
+#result {
+  margin: 20px;
+  font-size: 1.5em;
 }
 
 #logo {
@@ -44,40 +124,16 @@ body {
   transition: top 2s ease, opacity 1.5s ease;
 }
 
-button {
-  margin: 8px;
-  padding: 10px 20px;
-  font-size: 1rem;
-  border-radius: 10px;
-  border: none;
-  background: #4dd0e1;
-  color: white;
-  transition: transform 0.1s ease;
-}
-
-button:active {
-  transform: scale(0.95);
-}
-
-#sudoku-board td {
-  width: 8vw;
-  height: 8vw;
-  text-align: center;
+#main-menu {
+  display: none;
+  padding-top: 30vh;
   font-size: 5vw;
-  border: 1px solid #aaa;
-  background: #fef9f1;
 }
 
-#sudoku-board td.selected {
-  background-color: #ccf2ff;
+.info-box {
+  margin-top: 15px;
 }
 
-#sudoku-board td.error {
-  background-color: #fdd;
-  border: 2px solid red;
-}
-
-#sudoku-board td.fixed {
-  background-color: #ccc;
-  font-weight: bold;
+#summary p {
+  margin: 5px 0;
 }
