@@ -1,57 +1,71 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>みんなのナンプレ｜脳トレ会</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Opening -->
+
+  <!-- オープニング画面 -->
   <div id="opening">
     <img id="logo" src="logo.png.PNG" alt="ロゴ">
     <div id="title">脳トレ会</div>
-    <img id="nampure" src="nampure.png.PNG" alt="ナンプレ画像">
+    <img id="nampure" src="nampure.png.PNG" alt="みんなでナンプレ">
   </div>
 
-  <!-- Mode Select -->
-  <div id="mode-select">
+  <!-- メインメニュー -->
+  <div id="mode-select" style="display:none;">
     <h1>モードを選んでください</h1>
+    <div id="title-name">初心者</div>
+    <div id="brain-count">🧠0</div>
     <button onclick="selectMode('easy')">かんたん</button>
     <button onclick="selectMode('normal')">ふつう</button>
     <button onclick="selectMode('hard')">むずかしい</button>
     <button onclick="selectMode('toudai')">東大脳</button>
-    <button id="stanford-btn" onclick="selectMode('stanford')" disabled>スタンフォード脳（🧠50で解放）</button>
-    <div id="title-name">初心者</div>
-    <div id="brain-count">🧠0</div>
-  </div>
+    <button id="stanford-btn" disabled onclick="selectMode('stanford')">スタンフォード脳</button>
 
-  <!-- Sheet Select -->
-  <div id="sheet-select">
-    <h2 id="sheet-title">◯◯モードのシート選択</h2>
-    <div id="sheet-list"></div>
-    <div id="countdown">盤面のアップデートまであと7日！</div>
-    <button onclick="toggleStarInfo()">⭐️の評価基準</button>
-    <div id="star-info-popup" style="display:none;">
-      ⭐️3：3分以内にクリア<br />
-      ⭐️2：ミスなしでクリア<br />
-      ⭐️1：とにかくクリア<br />
-      🧠：難しい⭐️3、または東大脳でクリア
+    <div class="info-box">
+      <div id="update-remaining">盤面のアップデートまであと7日！</div>
+      <button onclick="toggleStarInfo()">⭐️の評価基準</button>
+      <div id="star-info-popup" style="display:none;">
+        <p>⭐️3：3分以内にクリア</p>
+        <p>⭐️2：ミスなしでクリア</p>
+        <p>⭐️1：クリアすればOK</p>
+        <p>🧠：hardで⭐️3 or 東大脳クリアで1個</p>
+      </div>
+      <div id="summary">
+        <p>取得⭐️：<span id="total-stars">0</span></p>
+        <p>取得🧠：<span id="total-brains">0</span></p>
+        <p>称号：<span id="current-title">初心者</span></p>
+      </div>
     </div>
+  </div>
+    <!-- シート選択画面 -->
+  <div id="sheet-select" style="display:none;">
+    <h2 id="sheet-title"></h2>
+    <div id="sheet-list" class="sheet-grid"></div>
     <button onclick="backToMode()">← 戻る</button>
   </div>
 
-  <!-- Game Screen -->
-  <div id="game-screen">
-    <h2 id="game-title">シート X</h2>
-    <div id="elapsed-time"></div>
+  <!-- ゲーム画面 -->
+  <div id="game-screen" style="display:none;">
+    <h2 id="game-title">シート</h2>
     <table id="sudoku-board"></table>
     <div id="number-buttons"></div>
-    <button onclick="checkAnswer()">提出する</button>
-    <button onclick="giveUp()">あきらめる</button>
+
+    <div class="game-actions">
+      <button onclick="checkAnswer()">提出する</button>
+      <button onclick="giveUp()">あきらめる</button>
+    </div>
+
     <div id="result"></div>
   </div>
+
+  <!-- 成功演出 -->
+  <canvas id="confetti-canvas" style="display: none; position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none;"></canvas>
 
   <script src="script.js"></script>
 </body>
