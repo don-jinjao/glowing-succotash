@@ -4,37 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>みんなのナンプレ｜脳トレ会</title>
-  <link rel="stylesheet" href="final_style.css" />
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
   <!-- オープニング -->
   <div id="opening">
-    <img id="logo" src="logo.png.PNG" alt="ロゴ" />
+    <img id="logo" src="logo.png.PNG" alt="ロゴ">
     <div id="title">脳トレ会</div>
-    <img id="nampure" src="nampure.png.PNG" alt="みんなでナンプレ" />
+    <img id="nampure" src="nampure.png.PNG" alt="ナンプレ画像">
   </div>
 
-  <!-- 難易度選択 -->
+  <!-- モード選択 -->
   <div id="mode-select" style="display:none;">
-    <h2>難易度を選んでね</h2>
+    <h2>モードを選んでください</h2>
+    <div id="title-name"></div>
+    <p id="brain-count-area">取得した脳：<span id="brain-count">0</span>個</p>
+    <p id="total-stars-area">取得した星：<span id="total-stars">0</span>個</p>
+    <p id="current-title-area">称号：<span id="current-title">初心者</span></p>
+    <p class="update-comment">盤面のアップデートまであと7日！</p>
     <button onclick="selectMode('easy')">かんたん</button>
     <button onclick="selectMode('normal')">ふつう</button>
     <button onclick="selectMode('hard')">むずかしい</button>
-    <button id="stanford-btn" onclick="selectMode('stanford')" disabled>スタンフォード脳</button>
-    <p id="update-info">盤面のアップデートまであと7日！</p>
-    <button onclick="toggleStarInfo()">⭐️の評価基準</button>
+    <button id="stanford-btn" disabled onclick="selectMode('toudai')">スタンフォード脳（🧠50個以上）</button>
+    <button id="star-info-btn" onclick="toggleStarInfo()">⭐️の評価基準</button>
     <div id="star-info-popup" style="display:none;">
-      <p>⭐️3：3分以内にクリア</p>
-      <p>⭐️2：ミスなしでクリア</p>
-      <p>⭐️1：クリアできればOK</p>
-      <p>🧠はむずかしい or 東大脳で⭐️3をとると追加されます</p>
-      <p>スタンフォード脳は🧠50個で解放！</p>
-    </div>
-    <div class="status">
-      <p class="red">取得した星：<span id="total-stars">0</span></p>
-      <p class="red">取得した脳：<span id="total-brains">0</span></p>
-      <p class="red">称号：<span id="current-title">初心者</span></p>
+      ⭐️3：3分以内にクリア<br>
+      ⭐️2：ミスなしでクリア<br>
+      ⭐️1：とにかくクリア！<br>
+      🧠：むずかしいで⭐️3、東大脳でクリア
     </div>
   </div>
 
@@ -50,13 +48,12 @@
     <h2 id="game-title"></h2>
     <table id="sudoku-board"></table>
     <div id="number-buttons"></div>
-    <div id="controls">
-      <button onclick="checkAnswer()">提出</button>
-      <button onclick="giveUp()">あきらめる</button>
-    </div>
+    <button onclick="checkAnswer()">答え合わせ</button>
+    <button onclick="giveUp()">あきらめる</button>
     <div id="result"></div>
+    <div id="particles"></div>
   </div>
 
-  <script src="final_script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
