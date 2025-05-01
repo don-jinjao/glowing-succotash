@@ -1,17 +1,17 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #e0f7fa;
+  font-family: sans-serif;
+  background-color: #f0f8ff;
   margin: 0;
-  padding: 0;
   text-align: center;
 }
 
 /* オープニング */
 #opening {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #e0f7fa;
-  z-index: 9999;
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: #e0f7fa;
+  overflow: hidden;
 }
 #logo {
   position: absolute;
@@ -43,31 +43,46 @@ body {
   transition: top 2s ease, opacity 1.5s ease;
 }
 
-/* ボタン共通 */
+/* 難易度選択・シート選択 */
 button {
-  margin: 10px;
-  padding: 10px 20px;
-  background-color: #4fc3f7;
-  color: #fff;
-  font-size: 1.1em;
+  padding: 12px 20px;
+  margin: 8px;
+  font-size: 1.2em;
+  background-color: #add8e6;
   border: none;
-  border-radius: 10px;
+  border-radius: 12px;
   cursor: pointer;
 }
-button:disabled {
-  background-color: #bbb;
-  cursor: not-allowed;
+button:hover {
+  background-color: #90c1de;
 }
-#star-info-popup {
-  margin-top: 10px;
-  background: #fff;
-  border: 1px solid #ccc;
+.status p {
+  margin: 6px 0;
+}
+.status .red {
+  color: #d40000;
+}
+#sheet-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  max-width: 300px;
+  margin: 0 auto;
+}
+.sheet-button {
+  background: #dff6ff;
+  border: 2px solid #0077cc;
+  border-radius: 12px;
   padding: 10px;
-  display: inline-block;
+  font-size: 1.2em;
+  position: relative;
+}
+.stars, .brains {
   font-size: 0.9em;
+  margin-top: 6px;
 }
 
-/* 盤面スタイル */
+/* ナンプレ盤面 */
 #sudoku-board {
   border-collapse: collapse;
   margin: 20px auto;
@@ -75,68 +90,46 @@ button:disabled {
 #sudoku-board td {
   width: 40px;
   height: 40px;
-  font-size: 1.5em;
   text-align: center;
-  border: 1px solid #999;
-  cursor: pointer;
-  background-color: white;
+  font-size: 1.2em;
+  border: 1px solid #ccc;
+}
+#sudoku-board td.fixed {
+  background-color: #e0e0e0;
+  font-weight: bold;
 }
 #sudoku-board td.selected {
   background-color: #b3e5fc;
 }
-#sudoku-board td.fixed {
-  background-color: #eee;
-}
 #sudoku-board td.error {
   background-color: #ffcdd2;
 }
-#sudoku-board td.error-existing {
+#sudoku-board td.red-border {
   border: 2px solid red;
 }
 
-/* シート一覧 */
-#sheet-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-  padding: 10px;
-  max-width: 300px;
-  margin: 0 auto;
+/* その他 */
+#number-buttons {
+  margin: 20px;
 }
-.sheet-button {
-  background: #4fc3f7;
-  color: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  position: relative;
-  font-size: 1.2em;
+#number-buttons button {
+  width: 40px;
+  height: 40px;
+  margin: 5px;
 }
-.stars, .brains {
-  font-size: 0.9em;
-  margin-top: 5px;
-}
-
-/* キラキラ演出 */
-#particles {
-  position: absolute;
-  pointer-events: none;
-  top: 0; left: 0; right: 0; bottom: 0;
-  z-index: 9999;
-}
-
-/* メッセージ */
 #result.success {
-  color: #2e7d32;
-  font-weight: bold;
+  color: green;
   font-size: 1.5em;
 }
 #result.fail {
-  color: #c62828;
-  font-weight: bold;
-  font-size: 1.2em;
+  color: red;
+  font-size: 1.5em;
 }
-
-.update-comment {
-  font-weight: bold;
-  color: #0277bd;
+#star-info-popup {
+  background: #fff8dc;
+  border: 1px solid #888;
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 300px;
+  border-radius: 10px;
 }
