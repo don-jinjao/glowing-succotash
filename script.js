@@ -137,19 +137,24 @@ function setupNumberButtons() {
   }
 }
 
-function placeNumber(num) {
+ function placeNumber(num) {
   if (!selectedCell) return;
   const { row, col, cell } = selectedCell;
   const allCells = document.querySelectorAll("#sudoku-board td");
   cell.textContent = num;
-  allCells.forEach(c => c.classList.remove("error", "error-existing"));
 
-  const conflicts = [];
+  // エラーリセット
+  allCells.forEach(c => {
+    c.classList.remove("error", "error-existing");
+  });
+
+  // エラーチェック（行・列・ブロック）
+  const conflictCells = [];
   for (let i = 0; i < 9; i++) {
     const rowCell = document.querySelector(`#sudoku-board tr:nth-child(${row + 1}) td:nth-child(${i + 1})`);
     const colCell = document.querySelector(`#sudoku-board tr:nth-child(${i + 1}) td:nth-child(${col + 1})`);
-    if (rowCell !== cell && rowCell.textContent == num) conflicts.push(rowCell);
-    if (colCell !== cell && colCell.textContent == num) conflicts.push(colCell);
+    if (rowCell !== cell && rowCell.textContent == num) conflictCells.push(rowCell);
+    if (colCell !== cell && colCell.textContent == num) conflictCells.push(colCell);
   }
 
   const boxRow = Math.floor(row / 3) * 3;
@@ -157,15 +162,18 @@ function placeNumber(num) {
   for (let r2 = boxRow; r2 < boxRow + 3; r2++) {
     for (let c2 = boxCol; c2 < boxCol + 3; c2++) {
       const boxCell = document.querySelector(`#sudoku-board tr:nth-child(${r2 + 1}) td:nth-child(${c2 + 1})`);
-      if (boxCell !== cell && boxCell.textContent == num) conflicts.push(boxCell);
+      if (boxCell !== cell && boxCell.textContent == num) conflictCells.push(boxCell);
     }
   }
 
-  if (conflicts.length > 0) {
+  if (conflictCells.length > 0) {
     cell.classList.add("error");
-    conflicts.forEach(c => {
-      if (c.classList.contains("fixed")) c.classList.add("error-existing");
-      else c.classList.add("error");
+    conflictCells.forEach(c => {
+      if (c.classList.contains("fixed")) {
+        c.classList.add("error-existing"); // 赤枠（固定マス）
+      } else {
+        c.classList.add("error"); // 赤背景（他の入力マス）
+      }
     });
   }
 }
