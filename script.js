@@ -1,4 +1,4 @@
-let puzzles = generatePuzzles(); // 各モードごとに100問（仮→本番へ切替可）
+let puzzles = generatePuzzles();
 let currentMode = "";
 let currentSheet = 0;
 let startTime = 0;
@@ -39,6 +39,14 @@ function runOpeningAnimation() {
     document.getElementById("mode-select").style.display = "block";
   }, 14000);
 }
+
+function getCurrentWeek() {
+  const now = new Date();
+  const start = new Date(2025, 0, 1);
+  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24 * 7));
+  return `week-${diff}`;
+}
+
 function selectMode(mode) {
   currentMode = mode;
   document.getElementById("mode-select").style.display = "none";
@@ -47,25 +55,18 @@ function selectMode(mode) {
   loadSheetButtons();
 }
 
-function getCurrentWeek() {
-  const now = new Date();
-  const start = new Date(2025, 0, 1); // 1月1日基準
-  const diff = Math.floor((now - start) / (1000 * 60 * 60 * 24 * 7));
-  return `week-${diff}`;
-}
-
 function loadSheetButtons() {
   const container = document.getElementById("sheet-list");
   container.innerHTML = "";
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < puzzles.length; i++) {
     const btn = document.createElement("div");
     btn.className = "sheet-button";
     btn.textContent = i + 1;
     btn.onclick = () => startGame(i);
 
     const key = `${currentMode}-${i}`;
-    const historyKey = getCurrentWeek();
-    const stars = (starsHistory[historyKey]?.[key]) || 0;
+    const week = getCurrentWeek();
+    const stars = (starsHistory[week]?.[key]) || 0;
     const best = starsData[key] || 0;
 
     btn.innerHTML += `<div class="stars">⭐️${stars}</div>`;
@@ -92,6 +93,7 @@ function startGame(index) {
   buildBoard(puzzles[index]);
   setupNumberButtons();
 }
+
 function buildBoard(puzzle) {
   const table = document.getElementById("sudoku-board");
   table.innerHTML = "";
@@ -107,12 +109,10 @@ function buildBoard(puzzle) {
       } else {
         cell.onclick = () => selectCell(cell, r, c);
       }
-
       if (r % 3 === 0) cell.style.borderTop = "2px solid black";
       if (c % 3 === 0) cell.style.borderLeft = "2px solid black";
       if (r === 8) cell.style.borderBottom = "2px solid black";
       if (c === 8) cell.style.borderRight = "2px solid black";
-
       row.appendChild(cell);
     }
     table.appendChild(row);
@@ -142,19 +142,14 @@ function placeNumber(num) {
   const { row, col, cell } = selectedCell;
   const allCells = document.querySelectorAll("#sudoku-board td");
   cell.textContent = num;
+  allCells.forEach(c => c.classList.remove("error", "error-existing"));
 
-  // エラーリセット
-  allCells.forEach(c => {
-    c.classList.remove("error", "error-existing");
-  });
-
-  // エラーチェック
-  const conflictCells = [];
+  const conflicts = [];
   for (let i = 0; i < 9; i++) {
     const rowCell = document.querySelector(`#sudoku-board tr:nth-child(${row + 1}) td:nth-child(${i + 1})`);
     const colCell = document.querySelector(`#sudoku-board tr:nth-child(${i + 1}) td:nth-child(${col + 1})`);
-    if (rowCell !== cell && rowCell.textContent == num) conflictCells.push(rowCell);
-    if (colCell !== cell && colCell.textContent == num) conflictCells.push(colCell);
+    if (rowCell !== cell && rowCell.textContent == num) conflicts.push(rowCell);
+    if (colCell !== cell && colCell.textContent == num) conflicts.push(colCell);
   }
 
   const boxRow = Math.floor(row / 3) * 3;
@@ -162,13 +157,13 @@ function placeNumber(num) {
   for (let r2 = boxRow; r2 < boxRow + 3; r2++) {
     for (let c2 = boxCol; c2 < boxCol + 3; c2++) {
       const boxCell = document.querySelector(`#sudoku-board tr:nth-child(${r2 + 1}) td:nth-child(${c2 + 1})`);
-      if (boxCell !== cell && boxCell.textContent == num) conflictCells.push(boxCell);
+      if (boxCell !== cell && boxCell.textContent == num) conflicts.push(boxCell);
     }
   }
 
-  if (conflictCells.length > 0) {
+  if (conflicts.length > 0) {
     cell.classList.add("error");
-    conflictCells.forEach(c => {
+    conflicts.forEach(c => {
       if (c.classList.contains("fixed")) c.classList.add("error-existing");
       else c.classList.add("error");
     });
@@ -180,7 +175,6 @@ function checkAnswer() {
   const board = document.querySelectorAll("#sudoku-board td");
   let valid = true;
   board.forEach(cell => cell.classList.remove("error"));
-
   board.forEach(cell => {
     if (!cell.textContent || isNaN(parseInt(cell.textContent))) {
       valid = false;
@@ -190,7 +184,7 @@ function checkAnswer() {
 
   const result = document.getElementById("result");
   if (valid) {
-    result.textContent = "貴方は天才だ！";
+    result.textContent = getRandomPraise();
     result.className = "success";
     showParticles();
     handleSuccess(elapsed);
@@ -201,14 +195,17 @@ function checkAnswer() {
 }
 
 function giveUp() {
+  const board = document.getElementById("sudoku-board");
+  board.innerHTML = "";
   const result = document.getElementById("result");
-  result.textContent = "また挑戦してな";
+  result.textContent = getRandomEncouragement();
   result.className = "fail";
+
   setTimeout(() => {
     result.textContent = "";
     document.getElementById("game-screen").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
-  }, 2000);
+  }, 5000);
 }
 
 function handleSuccess(elapsed) {
@@ -242,13 +239,22 @@ function updateBrainUI() {
   document.getElementById("total-stars").textContent = total;
 
   const title = document.getElementById("current-title");
-  if (brainCount >= 50) {
-    title.textContent = "脳神";
-    document.getElementById("stanford-btn").disabled = false;
-  } else if (brainCount >= 30) title.textContent = "覚醒者";
-  else if (brainCount >= 15) title.textContent = "集中マスター";
-  else if (brainCount >= 5) title.textContent = "挑戦者";
-  else title.textContent = "初心者";
+  const brainTitles = [
+    { threshold: 50, label: "脳神" },
+    { threshold: 30, label: "覚醒者" },
+    { threshold: 15, label: "集中マスター" },
+    { threshold: 5, label: "挑戦者" },
+    { threshold: 0, label: "初心者" }
+  ];
+
+  for (const { threshold, label } of brainTitles) {
+    if (brainCount >= threshold || total >= threshold * 2) {
+      title.textContent = label;
+      break;
+    }
+  }
+
+  document.getElementById("stanford-btn").disabled = brainCount < 50;
 }
 
 function toggleStarInfo() {
@@ -256,14 +262,28 @@ function toggleStarInfo() {
   info.style.display = info.style.display === "none" ? "block" : "none";
 }
 
-function generatePuzzles() {
-  // 仮盤面（easyモード用） ※本番用は固定配列に差し替え
-  return [
-    [[5,3,null,null,7,null,null,null,null],[6,null,null,1,9,5,null,null,null],[null,9,8,null,null,null,null,6,null],
-    [8,null,null,null,6,null,null,null,3],[4,null,null,8,null,3,null,null,1],[7,null,null,null,2,null,null,null,6],
-    [null,6,null,null,null,null,2,8,null],[null,null,null,4,1,9,null,null,5],[null,null,null,null,8,null,null,7,9]],
-    ...Array(9).fill(null).map(() => Array(9).fill(null))
+function getRandomPraise() {
+  const praises = [
+    "貴方は天才だ！",
+    "また一つ脳をアップデートした！",
+    "この集中力、脱帽です！",
+    "ひらめきの神様降りてきた!?",
+    "脳みそビカビカに光ってる！",
+    "一歩ずつ脳が進化している！",
+    "冷静さが光ってる！"
   ];
+  return praises[Math.floor(Math.random() * praises.length)];
+}
+
+function getRandomEncouragement() {
+  const messages = [
+    "また挑戦してな！",
+    "次はきっとできる！",
+    "あきらめへん心、最高や！",
+    "一歩ずつ前進中や！",
+    "ヒント使ってでも解こうとする貴方、最高だ！"
+  ];
+  return messages[Math.floor(Math.random() * messages.length)];
 }
 
 function showParticles() {
@@ -280,4 +300,13 @@ function showParticles() {
     particles.appendChild(star);
   }
   setTimeout(() => { particles.innerHTML = ""; }, 2000);
+}
+
+function generatePuzzles() {
+  return [
+    [[5,3,null,null,7,null,null,null,null],[6,null,null,1,9,5,null,null,null],[null,9,8,null,null,null,null,6,null],
+     [8,null,null,null,6,null,null,null,3],[4,null,null,8,null,3,null,null,1],[7,null,null,null,2,null,null,null,6],
+     [null,6,null,null,null,null,2,8,null],[null,null,null,4,1,9,null,null,5],[null,null,null,null,8,null,null,7,9]],
+    ...Array(9).fill(null).map(() => Array(9).fill(null))
+  ];
 }
