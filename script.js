@@ -195,19 +195,48 @@ function checkAnswer() {
 }
 
 function giveUp() {
-  const board = document.getElementById("sudoku-board");
-  board.innerHTML = "";
-  const result = document.getElementById("result");
-  result.textContent = getRandomEncouragement();
-  result.className = "fail";
+  // 盤面とゲーム画面を非表示
+  document.getElementById("game-screen").style.display = "none";
+
+  // フェードアウト用のカバー画面生成
+  const cover = document.createElement("div");
+  cover.style.position = "fixed";
+  cover.style.top = 0;
+  cover.style.left = 0;
+  cover.style.width = "100%";
+  cover.style.height = "100%";
+  cover.style.backgroundColor = "#f0f8ff";
+  cover.style.display = "flex";
+  cover.style.justifyContent = "center";
+  cover.style.alignItems = "center";
+  cover.style.fontSize = "1.8em";
+  cover.style.color = "#2e7d32";
+  cover.style.zIndex = 9999;
+  cover.style.transition = "opacity 1s";
+  cover.style.opacity = 0;
+
+  const messages = [
+    "また挑戦してな！",
+    "次はきっとできる！",
+    "あきらめへん心、最高や！",
+    "一歩ずつ前進中や！",
+    "ヒント使ってでも解こうとする貴方、最高だ！"
+  ];
+  cover.textContent = messages[Math.floor(Math.random() * messages.length)];
+
+  document.body.appendChild(cover);
+  requestAnimationFrame(() => {
+    cover.style.opacity = 1;
+  });
 
   setTimeout(() => {
-    result.textContent = "";
-    document.getElementById("game-screen").style.display = "none";
-    document.getElementById("mode-select").style.display = "block";
+    cover.style.opacity = 0;
+    setTimeout(() => {
+      cover.remove();
+      document.getElementById("mode-select").style.display = "block";
+    }, 1000);
   }, 5000);
 }
-
 function handleSuccess(elapsed) {
   let stars = 1;
   if (elapsed <= 180) stars = 3;
