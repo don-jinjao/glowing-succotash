@@ -95,6 +95,7 @@ function generatePuzzlesForAllModes() {
   }
 
   localStorage.setItem("lastGeneratedWeek", currentWeek);
+deleteOldWeekData(currentWeek);
 }
 
 function getRandomInRange([min, max]) {
@@ -107,5 +108,15 @@ function checkForNewWeek() {
 
   if (currentWeek !== lastGeneratedWeek) {
     generatePuzzlesForAllModes();
+  }
+}
+
+function deleteOldWeekData(currentWeek) {
+  const levels = ["easy", "normal", "hard", "toudai", "stanford"];
+  for (let week = 0; week < currentWeek; week++) {
+    for (const level of levels) {
+      localStorage.removeItem(`puzzles_${level}_${week}`);
+      localStorage.removeItem(`solutions_${level}_${week}`);
+    }
   }
 }
