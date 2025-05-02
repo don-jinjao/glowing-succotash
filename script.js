@@ -54,13 +54,23 @@ let brainCount = parseInt(localStorage.getItem("brainCount") || "0");
 
 window.onload = () => {
   lockGameDuringUpdate();
+
   const currentWeek = getCurrentWeek();
-  if (!localStorage.getItem("lastGeneratedWeek")) {
+
+  const anySaved = DIFFICULTIES.some(level =>
+    localStorage.getItem(`puzzles_${level}_${currentWeek}`) &&
+    localStorage.getItem(`solutions_${level}_${currentWeek}`)
+  );
+
+  if (!anySaved) {
     generatePuzzlesForAllModes();
     localStorage.setItem("lastGeneratedWeek", currentWeek);
   }
-  updateUpdateCountdown();
+
+  // ★生成後に必ずロード
   loadAllPuzzles();
+
+  updateUpdateCountdown();
   runOpeningAnimation();
   updateBrainUI();
 };
