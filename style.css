@@ -139,5 +139,11 @@ button:disabled {
 
 .update-comment {
   font-weight: bold;
-  color: #0277bd;
+  color: #d32f2f; /* 赤を優先 */
+  font-size: 1.2em;
+  border: 2px solid #fdd;
+  padding: 0.5em;
+  margin: 0.5em 0;
+  background-color: #fff0f0;
+  text-align: center;
 }
