@@ -416,4 +416,16 @@ function lockGameDuringUpdate() {
     throw new Error("ナンプレ更新中のためロック中");
   }
 }
+function checkForNewWeek() {
+  const currentWeek = getCurrentWeek();
+  const lastGeneratedWeek = parseInt(localStorage.getItem("lastGeneratedWeek") || "-1");
 
+  const anySaved = DIFFICULTIES.some(level =>
+    localStorage.getItem(`puzzles_${level}_${currentWeek}`) &&
+    localStorage.getItem(`solutions_${level}_${currentWeek}`)
+  );
+
+  if (!anySaved) {
+    generatePuzzlesForAllModes(); // ← ここでlastGeneratedWeekの保存もされる
+  }
+}
