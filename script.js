@@ -54,8 +54,12 @@ let brainCount = parseInt(localStorage.getItem("brainCount") || "0");
 
 window.onload = () => {
   lockGameDuringUpdate();
-  checkForNewWeek(); // 
-  updateUpdateCountdown(); // 
+  const currentWeek = getCurrentWeek();
+  if (!localStorage.getItem("lastGeneratedWeek")) {
+    generatePuzzlesForAllModes();
+    localStorage.setItem("lastGeneratedWeek", currentWeek);
+  }
+  updateUpdateCountdown();
   loadAllPuzzles();
   runOpeningAnimation();
   updateBrainUI();
