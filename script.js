@@ -1,5 +1,3 @@
-スクリプト最新
-
 const DIFFICULTIES = ["easy", "normal", "hard", "toudai", "stanford"];
 let brainCount = 0;
 let starsData = {};
