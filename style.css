@@ -186,3 +186,28 @@ button:disabled {
   background-color: white;
   cursor: pointer;
 }
+#manual-update-container {
+  margin-top: 20px;
+}
+
+#manual-update-btn {
+  font-size: 16px;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background-color: #66bb6a; /* 緑系 */
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+#manual-update-btn:hover {
+  background-color: #558b2f;
+}
+
+#update-note {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 5px;
+  line-height: 1.4;
+}
