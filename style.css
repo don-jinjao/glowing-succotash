@@ -184,6 +184,21 @@ button:disabled {
   border-radius: 6px;
 }
 }
+/* モード選択画面の全体調整 */
+#mode-select {
+  max-width: 95%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* 更新ノートと寄せ書きの幅・バランス調整 */
+#update-note,
+.update-comment {
+  max-width: 90%;
+  margin: 10px auto;
+  font-size: 0.95em;
+  line-height: 1.6;
+}
 #update-note {
   font-size: 0.9em;
   color: #333;
