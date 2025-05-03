@@ -160,22 +160,29 @@ button:disabled {
   background-color: #558b2f;
 }
 #update-note {
-  font-size: 0.9em;
-  color: #333;
-  margin-top: 5px;
-  line-height: 1.4;
+  font-size: 0.85em;
+  color: #555;
+  margin-top: 10px;
+  line-height: 1.6;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 /* 寄せ書きコメント */
 .update-comment {
   font-weight: bold;
   color: #d32f2f;
-  font-size: 1.2em;
-  border: 2px solid #fdd;
-  padding: 0.5em;
-  margin: 0.5em 0;
-  background-color: #fff0f0;
+  font-size: 1em;
+  border: 1px solid #fbb;
+  padding: 0.5em 1em;
+  margin: 0.5em auto;
+  background-color: #fff5f5;
   text-align: center;
+  max-width: 90%;
+  border-radius: 6px;
+}
 }
 #update-note {
   font-size: 0.9em;
