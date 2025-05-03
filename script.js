@@ -54,23 +54,9 @@ let brainCount = parseInt(localStorage.getItem("brainCount") || "0");
 
 window.onload = () => {
   lockGameDuringUpdate();
-
-  const currentWeek = getCurrentWeek();
-
-  const anySaved = DIFFICULTIES.some(level =>
-    localStorage.getItem(`puzzles_${level}_${currentWeek}`) &&
-    localStorage.getItem(`solutions_${level}_${currentWeek}`)
-  );
-
-  if (!anySaved) {
-    generatePuzzlesForAllModes();
-    localStorage.setItem("lastGeneratedWeek", currentWeek);
-  }
-
-  // ★生成後に必ずロード
-  loadAllPuzzles();
-
   updateUpdateCountdown();
+  checkForDataOrShowUpdateButton(); // データがなければ生成＋ボタン処理
+  loadAllPuzzles();
   runOpeningAnimation();
   updateBrainUI();
 };
@@ -79,6 +65,7 @@ function runOpeningAnimation() {
   const logo = document.getElementById('logo');
   const title = document.getElementById('title');
   const nampure = document.getElementById('nampure');
+
   setTimeout(() => { logo.style.top = '20vh'; }, 500);
   setTimeout(() => { logo.style.transition = 'top 0.3s ease'; logo.style.top = '22vh'; }, 2800);
   setTimeout(() => { logo.style.top = '20vh'; }, 3200);
