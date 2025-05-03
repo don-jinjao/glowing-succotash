@@ -94,7 +94,13 @@ button:disabled {
   border: 2px solid red;
 }
 
-
+/* 太枠用（3×3区切り） */
+#sudoku-board td.border-right {
+  border-right: 2px solid #000;
+}
+#sudoku-board td.border-bottom {
+  border-bottom: 2px solid #000;
+}
 /* シート一覧 */
 #sheet-list {
   display: grid;
