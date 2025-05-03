@@ -587,7 +587,18 @@ function checkAnswer() {
 }
 
 function giveUp() {
+  // 現在の画面非表示、諦めメッセージ表示
   document.getElementById("game-screen").style.display = "none";
   document.getElementById("giveup-screen").style.display = "block";
-  document.getElementById("giveup-message").textContent = "諦めても大丈夫。ここまで頑張ったあなた、最高です。";
+
+  // やさしいメッセージ表示
+  const message = document.getElementById("giveup-message");
+  message.textContent = "諦めても大丈夫。ここまで頑張ったあなた、最高です。";
+
+  // 数秒後にメインメニューへ戻す（2.5秒）
+  setTimeout(() => {
+    document.getElementById("giveup-screen").style.display = "none";
+    document.getElementById("mode-select").style.display = "block";
+    updateBrainUI(); // 称号や脳数も更新
+  }, 2500);
 }
