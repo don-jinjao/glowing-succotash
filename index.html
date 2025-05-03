@@ -24,7 +24,7 @@
     <img id="nampure" src="nampure.png.PNG" alt="ナンプレ画像">
   </div>
 
- <!-- モード選択 -->
+<!-- モード選択 -->
 <div id="mode-select" style="display:none;">
   <h2>モードを選んでください</h2>
   <div id="title-name"></div>
@@ -37,12 +37,13 @@
   <button onclick="selectMode('hard')">むずかしい</button>
   <button onclick="selectMode('toudai')">東大脳</button>
 
-  <div id="manual-update-container">
-    <button id="manual-update-btn" onclick="manualUpdate()">全ての盤面を新しくする</button>
-    <div class="update-comment">
-      全ての盤面が新しくなります！<br>
-      ゲットした星や脳はそのまま残りますよ♪
-    </div>
+  <!-- 盤面更新ボタン＋寄せ書き -->
+  <div id="update-area">
+    <button id="manual-update-btn" onclick="manualUpdate()">盤面更新ボタン</button>
+    <p class="update-note">
+      ※このボタンを押すと全ての盤面が新しく更新されるよ！<br>
+      ただしゲットした脳と星はしっかり保管されます。
+    </p>
     <p id="update-loading" style="display:none; font-weight:bold;">更新中…しばらくお待ちください</p>
   </div>
 
