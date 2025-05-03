@@ -535,3 +535,59 @@ function startGame(mode, index) {
     }
   }
 }
+
+function checkAnswer() {
+  const board = document.getElementById("sudoku-board");
+  const cells = board.querySelectorAll("td");
+  let isCorrect = true;
+
+  const mode = document.getElementById("game-title").textContent.split("モード")[0];
+  const indexText = document.getElementById("game-title").textContent.match(/No\.(\d+)/);
+  const index = indexText ? parseInt(indexText[1], 10) - 1 : 0;
+
+  const solution = window.solutionData?.[mode]?.[index];
+
+  cells.forEach(cell => {
+    const row = parseInt(cell.dataset.row);
+    const col = parseInt(cell.dataset.col);
+    if (!cell.classList.contains("fixed")) {
+      const input = parseInt(cell.textContent.trim());
+      if (input !== solution[row][col]) {
+        isCorrect = false;
+        cell.style.backgroundColor = "#fdd";
+      } else {
+        cell.style.backgroundColor = "#dfd";
+      }
+    }
+  });
+
+  if (isCorrect) {
+    const clearTime = (Date.now() - window.startTime) / 1000;
+    let stars = 1;
+    if (clearTime <= 180) stars = 3;
+    else if (clearTime <= 600) stars = 2;
+
+    const key = `${mode}_${index}`;
+    starsData[key] = stars;
+    localStorage.setItem("starsData", JSON.stringify(starsData));
+
+    if (mode === "hard" && stars === 3) brainCount++;
+    if (mode === "toudai") brainCount++;
+    if (mode === "stanford") brainCount += stars;
+
+    localStorage.setItem("brainCount", brainCount);
+    updateBrainUI();
+
+    document.getElementById("result").className = "success";
+    document.getElementById("result").textContent = `正解！⭐️${stars}つ獲得！`;
+  } else {
+    document.getElementById("result").className = "fail";
+    document.getElementById("result").textContent = "間違いがあります。もう一度見直してね。";
+  }
+}
+
+function giveUp() {
+  document.getElementById("game-screen").style.display = "none";
+  document.getElementById("giveup-screen").style.display = "block";
+  document.getElementById("giveup-message").textContent = "諦めても大丈夫。ここまで頑張ったあなた、最高です。";
+}
