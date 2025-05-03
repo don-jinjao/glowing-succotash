@@ -1,3 +1,5 @@
+スクリプト最新
+
 const DIFFICULTIES = ["easy", "normal", "hard", "toudai", "stanford"];
 let brainCount = 0;
 let starsData = {};
@@ -384,14 +386,7 @@ function startGame(mode, index) {
         cell.textContent = val;
         cell.classList.add("fixed");
       } else {
-        cell.contentEditable = true;
-        cell.addEventListener("input", () => {
-          const input = cell.textContent.trim();
-          if (!/^[1-9]?$/.test(input)) {
-            cell.textContent = "";
-          }
-          checkConflicts();
-        });
+        cell.classList.add("editable");
         cell.addEventListener("click", () => {
           if (selectedCell) selectedCell.classList.remove("selected");
           selectedCell = cell;
@@ -401,7 +396,6 @@ function startGame(mode, index) {
       cell.dataset.row = r;
       cell.dataset.col = c;
 
-      // ここで太枠クラスを付与
       if ((c + 1) % 3 === 0 && c !== 8) cell.classList.add("border-right");
       if ((r + 1) % 3 === 0 && r !== 8) cell.classList.add("border-bottom");
 
