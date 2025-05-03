@@ -5,6 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>みんなのナンプレ｜脳トレ会</title>
   <link rel="stylesheet" href="style.css" />
+
+<style>
+  .selected {
+    background-color: #cceeff !important;
+  }
+  .conflict {
+    border: 2px solid red !important;
+  }
+</style>
 </head>
 <body>
 
@@ -16,28 +25,33 @@
   </div>
 
   <!-- モード選択 -->
-  <div id="mode-select" style="display:none;">
-    <h2>モードを選んでください</h2>
-    <div id="title-name"></div>
-    <p id="brain-count-area">取得した脳：<span id="brain-count">0</span>個</p>
-    <p id="total-stars-area">取得した星：<span id="total-stars">0</span>個</p>
-    <p id="current-title-area">称号：<span id="current-title">初心者</span></p>
-    <p id="update-countdown" class="update-comment"></p>
-    <button onclick="selectMode('easy')">かんたん</button>
-    <button onclick="selectMode('normal')">ふつう</button>
-    <button onclick="selectMode('hard')">むずかしい</button>
-    <button onclick="selectMode('toudai')">東大脳</button>
-    <button id="stanford-btn" disabled onclick="selectMode('toudai')">スタンフォード脳（🧠50個以上）</button>
-    <p id="stanford-note" style="color: #d32f2f; font-size: 0.95em;">
-  ※🧠50個以上で解放されます
-</p>
-    <button id="star-info-btn" onclick="toggleStarInfo()">⭐️の評価基準</button>
-    <div id="star-info-popup" style="display:none; line-height: 1.8em; padding: 0.5em;">
+<div id="mode-select" style="display:none;">
+  <h2>モードを選んでください</h2>
+  <div id="title-name"></div>
+  <p id="brain-count-area">取得した脳：<span id="brain-count">0</span>個</p>
+  <p id="total-stars-area">取得した星：<span id="total-stars">0</span>個</p>
+  <p id="current-title-area">称号：<span id="current-title">初心者</span></p>
+
+  <button onclick="selectMode('easy')">かんたん</button>
+  <button onclick="selectMode('normal')">ふつう</button>
+  <button onclick="selectMode('hard')">むずかしい</button>
+  <button onclick="selectMode('toudai')">東大脳</button>
+
+  <button id="manual-update-btn" onclick="manualUpdate()">盤面をアップデートする</button>
+  <p id="update-loading" style="display:none; font-weight:bold;">更新中…しばらくお待ちください</p>
+
+  <button id="stanford-btn" disabled onclick="selectMode('stanford')">スタンフォード脳（🧠50個以上）</button>
+  <p id="stanford-note" style="color: #d32f2f; font-size: 0.95em;">
+    ※🧠50個以上で解放されます
+  </p>
+
+  <button id="star-info-btn" onclick="toggleStarInfo()">⭐️の評価基準</button>
   <div id="star-info-popup" style="display:none; line-height: 1.8em; padding: 0.5em;">
-  <p>⭐️3：3分以内にクリア</p>
-  <p>⭐️2：ミスなしでクリア</p>
-  <p>⭐️1：とにかくクリア！</p>
-  <p>🧠：むずかしいで⭐️3、東大脳でクリア</p>
+    <p>⭐️3：3分以内にクリア</p>
+    <p>⭐️2：ミスなしでクリア</p>
+    <p>⭐️1：とにかくクリア！</p>
+    <p>🧠：むずかしいで⭐️3、東大脳でクリア</p>
+  </div>
 </div>
 
   <!-- シート選択 -->
