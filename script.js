@@ -402,6 +402,7 @@ function startGame(mode, index) {
     board.appendChild(row);
   }
 
+  // 答え合わせボタン
   const checkBtn = document.getElementById("check-answer-btn");
   checkBtn.style.display = "inline-block";
   checkBtn.onclick = () => {
@@ -448,6 +449,13 @@ function startGame(mode, index) {
     } else {
       alert("間違いがあります。もう一度見直してね。");
     }
+  };
+
+  // あきらめボタン（←これが今回の追加ポイント）
+  const giveUpBtn = document.getElementById("give-up-btn");
+  giveUpBtn.style.display = "inline-block";
+  giveUpBtn.onclick = () => {
+    giveUp();
   };
 }
 
