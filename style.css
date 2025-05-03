@@ -88,13 +88,12 @@ button:disabled {
   background-color: #eee;
 }
 #sudoku-board td.error {
-  background-color: #ffcdd2;
+  background-color: #ffcdd2; /* 入力ミス用の赤背景 */
 }
 #sudoku-board td.error-existing {
-  border: 2px solid red;
+  border: 2px solid red; /* 既存マスの赤枠 */
 }
-
-/* 太枠用（3×3区切り） */
+/* 太線（3×3ブロック枠） */
 #sudoku-board td.border-right {
   border-right: 2px solid #000;
 }
