@@ -177,6 +177,12 @@ button:disabled {
   background-color: #fff0f0;
   text-align: center;
 }
+#update-note {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 5px;
+  line-height: 1.4;
+}
 
 /* スマホ向け画面最適化 */
 #game-screen {
