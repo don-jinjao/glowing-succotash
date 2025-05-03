@@ -132,9 +132,13 @@ function checkForDataOrShowUpdateButton() {
   );
 
   const updateBtn = document.getElementById("manual-update-btn");
+  const updateArea = document.getElementById("update-area");
+
   if (!hasData) {
-    updateBtn.style.display = "inline-block";
+    updateArea.style.display = "block";       // ← 親を表示
+    updateBtn.style.display = "inline-block"; // ← ボタンを表示
   } else {
+    updateArea.style.display = "none";        // ← 親ごと非表示
     updateBtn.style.display = "none";
   }
 }
