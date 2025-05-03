@@ -88,18 +88,18 @@ button:disabled {
   background-color: #eee;
 }
 #sudoku-board td.error {
-  background-color: #ffcdd2; /* 入力ミス用の赤背景 */
+  background-color: #ffcdd2;
 }
 #sudoku-board td.error-existing {
-  border: 2px solid red; /* 既存マスの赤枠 */
+  border: 2px solid red;
 }
-/* 太線（3×3ブロック枠） */
 #sudoku-board td.border-right {
   border-right: 2px solid #000;
 }
 #sudoku-board td.border-bottom {
   border-bottom: 2px solid #000;
 }
+
 /* シート一覧 */
 #sheet-list {
   display: grid;
@@ -142,9 +142,34 @@ button:disabled {
   font-size: 1.2em;
 }
 
+/* 手動更新ボタン＋寄せ書き */
+#manual-update-container {
+  margin-top: 20px;
+}
+#manual-update-btn {
+  font-size: 16px;
+  padding: 8px 16px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background-color: #66bb6a;
+  color: white;
+  border: none;
+  transition: background-color 0.3s;
+}
+#manual-update-btn:hover {
+  background-color: #558b2f;
+}
+#update-note {
+  font-size: 0.9em;
+  color: #333;
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+/* 寄せ書きコメント */
 .update-comment {
   font-weight: bold;
-  color: #d32f2f; /* 赤を優先 */
+  color: #d32f2f;
   font-size: 1.2em;
   border: 2px solid #fdd;
   padding: 0.5em;
@@ -152,9 +177,8 @@ button:disabled {
   background-color: #fff0f0;
   text-align: center;
 }
-/* === スマホ向け画面最適化・操作性向上 === */
 
-/* 全体レイアウトを縦に整える */
+/* スマホ向け画面最適化 */
 #game-screen {
   height: 100vh;
   display: flex;
@@ -164,14 +188,10 @@ button:disabled {
   box-sizing: border-box;
   overflow: hidden;
 }
-
-/* ナンプレ盤面の縮小 */
 #sudoku-board {
   transform: scale(0.9);
   transform-origin: top center;
 }
-
-/* 数字パレット＋操作ボタン */
 #number-buttons button,
 #check-answer-btn,
 #give-up-btn {
@@ -180,34 +200,7 @@ button:disabled {
   margin: 4px;
   border-radius: 6px;
 }
-
-/* 入力可能マス */
 .editable {
   background-color: white;
   cursor: pointer;
-}
-#manual-update-container {
-  margin-top: 20px;
-}
-
-#manual-update-btn {
-  font-size: 16px;
-  padding: 8px 16px;
-  margin-top: 10px;
-  border-radius: 8px;
-  background-color: #66bb6a; /* 緑系 */
-  color: white;
-  border: none;
-  transition: background-color 0.3s;
-}
-
-#manual-update-btn:hover {
-  background-color: #558b2f;
-}
-
-#update-note {
-  font-size: 0.9em;
-  color: #333;
-  margin-top: 5px;
-  line-height: 1.4;
 }
