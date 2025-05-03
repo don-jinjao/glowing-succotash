@@ -334,6 +334,43 @@ function startGame(mode, index) {
   document.getElementById("game-screen").style.display = "block";
   document.getElementById("game-title").textContent = `${mode}モード - No.${index + 1}`;
 
+  // タイマー表示
+  const timerDisplay = document.getElementById("timer-display") || document.createElement("p");
+  timerDisplay.id = "timer-display";
+  timerDisplay.style.marginTop = "10px";
+  timerDisplay.style.fontWeight = "bold";
+  document.getElementById("game-title").after(timerDisplay);
+  if (window.timerInterval) clearInterval(window.timerInterval);
+  window.timerInterval = setInterval(() => {
+    const seconds = Math.floor((Date.now() - window.startTime) / 1000);
+    timerDisplay.textContent = `経過時間：${seconds}秒`;
+  }, 1000);
+
+  // 数字パレット
+  const numberButtons = document.getElementById("number-buttons");
+  numberButtons.innerHTML = "";
+  for (let i = 1; i <= 9; i++) {
+    const btn = document.createElement("button");
+    btn.textContent = i;
+    btn.onclick = () => {
+      if (selectedCell && !selectedCell.classList.contains("fixed")) {
+        selectedCell.textContent = i;
+        checkConflicts();
+      }
+    };
+    numberButtons.appendChild(btn);
+  }
+  const delBtn = document.createElement("button");
+  delBtn.textContent = "消す";
+  delBtn.onclick = () => {
+    if (selectedCell && !selectedCell.classList.contains("fixed")) {
+      selectedCell.textContent = "";
+      checkConflicts();
+    }
+  };
+  numberButtons.appendChild(delBtn);
+
+  // 盤面描画
   const board = document.getElementById("sudoku-board");
   board.innerHTML = "";
   let selectedCell = null;
@@ -363,6 +400,11 @@ function startGame(mode, index) {
       }
       cell.dataset.row = r;
       cell.dataset.col = c;
+
+      // ここで太枠クラスを付与
+      if ((c + 1) % 3 === 0 && c !== 8) cell.classList.add("border-right");
+      if ((r + 1) % 3 === 0 && r !== 8) cell.classList.add("border-bottom");
+
       row.appendChild(cell);
     }
     board.appendChild(row);
@@ -391,7 +433,6 @@ function startGame(mode, index) {
     if (isCorrect) {
       alert("正解！お見事！");
 
-      // ★【2】評価処理：クリア時間、星、脳、称号
       const clearTime = (Date.now() - window.startTime) / 1000;
       let stars = 1;
       if (clearTime <= 180) {
@@ -409,70 +450,86 @@ function startGame(mode, index) {
       if (mode === "stanford") brainCount += stars;
 
       localStorage.setItem("brainCount", brainCount);
-      updateBrainUI(); // ←【4】称号・脳数のUI更新
+      updateBrainUI();
 
       alert(`⭐️${stars}つ獲得！`);
     } else {
       alert("間違いがあります。もう一度見直してね。");
     }
   };
+}
 
  
   function checkConflicts() {
-    const cells = board.querySelectorAll("td");
-    cells.forEach(cell => {
-      cell.classList.remove("conflict");
-      cell.style.backgroundColor = ""; // リセット
-    });
+  const cells = document.querySelectorAll("#sudoku-board td");
 
-    const grid = Array.from({ length: 9 }, () => Array(9).fill(null));
+  // すべてのマスのスタイル・クラスをリセット
+  cells.forEach(cell => {
+    cell.classList.remove("conflict");
+    cell.classList.remove("error-existing");
+    cell.style.backgroundColor = "";
+  });
 
-    for (let cell of cells) {
-      const r = parseInt(cell.dataset.row);
-      const c = parseInt(cell.dataset.col);
+  // 各マスについて重複チェック
+  for (let r = 0; r < 9; r++) {
+    for (let c = 0; c < 9; c++) {
+      const cell = document.querySelector(`td[data-row='${r}'][data-col='${c}']`);
       const val = parseInt(cell.textContent.trim());
-      if (!cell.classList.contains("fixed") && val >= 1 && val <= 9) {
-        if (grid[r][c] === null) grid[r][c] = val;
+
+      if (!val || cell.classList.contains("fixed")) continue;
+
+      let conflict = false;
+
+      // 行と列チェック
+      for (let i = 0; i < 9; i++) {
+        if (i !== c) {
+          const other = document.querySelector(`td[data-row='${r}'][data-col='${i}']`);
+          if (parseInt(other.textContent.trim()) === val) conflict = true;
+        }
+        if (i !== r) {
+          const other = document.querySelector(`td[data-row='${i}'][data-col='${c}']`);
+          if (parseInt(other.textContent.trim()) === val) conflict = true;
+        }
       }
-    }
 
-    // チェック
-    for (let r = 0; r < 9; r++) {
-      for (let c = 0; c < 9; c++) {
-        const cell = board.querySelector(`td[data-row='${r}'][data-col='${c}']`);
-        const val = parseInt(cell.textContent.trim());
-        if (!val || cell.classList.contains("fixed")) continue;
+      // ブロックチェック
+      const sr = Math.floor(r / 3) * 3;
+      const sc = Math.floor(c / 3) * 3;
+      for (let dr = 0; dr < 3; dr++) {
+        for (let dc = 0; dc < 3; dc++) {
+          const nr = sr + dr;
+          const nc = sc + dc;
+          if (nr === r && nc === c) continue;
+          const other = document.querySelector(`td[data-row='${nr}'][data-col='${nc}']`);
+          if (parseInt(other.textContent.trim()) === val) conflict = true;
+        }
+      }
 
-        let conflict = false;
+      // コンフリクトがあれば赤表示
+      if (conflict) {
+        cell.classList.add("conflict");
+        cell.style.backgroundColor = "#fdd";
 
-        // 行・列チェック
+        // 被った固定数字にも赤枠をつける
         for (let i = 0; i < 9; i++) {
-          if (i !== c) {
-            const other = board.querySelector(`td[data-row='${r}'][data-col='${i}']`);
-            if (parseInt(other.textContent.trim()) === val) conflict = true;
+          const rowCell = document.querySelector(`td[data-row='${r}'][data-col='${i}']`);
+          if (rowCell.classList.contains("fixed") && parseInt(rowCell.textContent.trim()) === val) {
+            rowCell.classList.add("error-existing");
           }
-          if (i !== r) {
-            const other = board.querySelector(`td[data-row='${i}'][data-col='${c}']`);
-            if (parseInt(other.textContent.trim()) === val) conflict = true;
+          const colCell = document.querySelector(`td[data-row='${i}'][data-col='${c}']`);
+          if (colCell.classList.contains("fixed") && parseInt(colCell.textContent.trim()) === val) {
+            colCell.classList.add("error-existing");
           }
         }
-
-        // ブロックチェック
-        const sr = Math.floor(r / 3) * 3;
-        const sc = Math.floor(c / 3) * 3;
         for (let dr = 0; dr < 3; dr++) {
           for (let dc = 0; dc < 3; dc++) {
             const nr = sr + dr;
             const nc = sc + dc;
-            if (nr === r && nc === c) continue;
-            const other = board.querySelector(`td[data-row='${nr}'][data-col='${nc}']`);
-            if (parseInt(other.textContent.trim()) === val) conflict = true;
+            const blockCell = document.querySelector(`td[data-row='${nr}'][data-col='${nc}']`);
+            if (blockCell.classList.contains("fixed") && parseInt(blockCell.textContent.trim()) === val) {
+              blockCell.classList.add("error-existing");
+            }
           }
-        }
-
-        if (conflict) {
-          cell.classList.add("conflict");
-          cell.style.backgroundColor = "#fdd";
         }
       }
     }
