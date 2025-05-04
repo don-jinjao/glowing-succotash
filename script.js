@@ -209,7 +209,7 @@ function getTitleFromBrainCount(count) {
 }
 
 window.onload = function () {
-  generatePuzzlesForAllModes(); // 先行して盤面生成を開始
+  generatePuzzlesForAllModes(); // 盤面生成を先に開始！
 
   const logo = document.getElementById("logo");
   const title = document.getElementById("title");
@@ -226,14 +226,14 @@ window.onload = function () {
     logo.style.transform = "translateX(-50%) translateY(0)";
   }, 1800);
 
-  // 2. ロゴ静止後、タイトルが走り込み（待機時間延長＋ゆっくり）
+  // 2. タイトル走り込み（少し後に、ゆっくり）
   setTimeout(() => {
     title.style.transition = "left 0.8s cubic-bezier(0.15, 1.6, 0.4, 1)";
     title.style.left = "50%";
     title.style.transform = "translateX(-50%)";
   }, 3000);
 
-  // 3. ロゴとタイトルをフェードアウト（+1秒）
+  // 3. ロゴとタイトルをフェードアウト
   setTimeout(() => {
     logo.style.transition = "opacity 1s ease";
     title.style.transition = "opacity 1s ease";
@@ -241,7 +241,7 @@ window.onload = function () {
     title.style.opacity = "0";
   }, 5500);
 
-  // 4. ナンプレ画像：右下→左上へ（ゆっくり）
+  // 4. ナンプレ画像：右下→左上へスワイプ登場
   setTimeout(() => {
     nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
     nampure.style.top = "10vh";
@@ -249,7 +249,7 @@ window.onload = function () {
     nampure.style.opacity = "1";
   }, 6600);
 
-  // 5. 中央での静止時間を延長（＋1秒）
+  // 5. 中央での静止時間を延長（+1秒）
   setTimeout(() => {
     nampure.style.transition = "top 1.8s ease, left 1.8s ease, opacity 1.8s ease";
     nampure.style.top = "-100vh";
@@ -257,13 +257,17 @@ window.onload = function () {
     nampure.style.opacity = "0";
   }, 10100);
 
-  // 6. 本編UI表示（遅らせる）
+  // 6. 本編UI表示 ＋ データ読み込み（遅延付き）
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-    loadAllPuzzles?.();
+
+    // 200ms 待ってから読み込み（生成完了に猶予）
+    setTimeout(() => {
+      loadAllPuzzles?.();
+    }, 200);
   }, 12000);
 };
 function loadAllPuzzles() {
