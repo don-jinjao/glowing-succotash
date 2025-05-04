@@ -192,18 +192,15 @@ button:disabled {
 }
 
 /* 更新ノートと寄せ書きの幅・バランス調整 */
-#update-note,
-.update-comment {
-  max-width: 90%;
-  margin: 10px auto;
-  font-size: 0.95em;
-  line-height: 1.6;
-}
 #update-note {
-  font-size: 0.9em;
-  color: #333;
+  font-size: 0.7em; /* ← 小さくしたいならここを調整 */
+  color: #555;
   margin-top: 5px;
   line-height: 1.4;
+  max-width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 /* スマホ向け画面最適化 */
