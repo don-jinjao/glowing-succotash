@@ -231,7 +231,7 @@ button:disabled {
 #result.fail {
   display: block;
 }
-#update-note {
+#update-area .update-note {
   font-size: 0.5em !important;
   color: #555;
   margin-top: 5px;
