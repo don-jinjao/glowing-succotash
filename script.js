@@ -625,3 +625,21 @@ function giveUp() {
     updateBrainUI(); // 称号や脳数も更新
   }, 2500);
 }
+function manualUpdate() {
+  // ① 広告モーダルを表示
+  document.getElementById("ad-modal").style.display = "block";
+
+  // ② 30秒後に非表示＆本来の更新処理を実行
+  setTimeout(() => {
+    document.getElementById("ad-modal").style.display = "none";
+
+    // 本来の更新処理ここから
+    const week = getCurrentWeek();
+    DIFFICULTIES.forEach(level => {
+      localStorage.removeItem(`puzzles_${level}_${week}`);
+      localStorage.removeItem(`solutions_${level}_${week}`);
+    });
+
+    location.reload(); // 画面リロードして反映
+  }, 30000); // 30秒（30000ミリ秒）
+}
