@@ -245,30 +245,25 @@ window.onload = function () {
     nampure.style.opacity = "0";
   }, 10100);
 
-  // 6. 演出終了 → 本体表示 & 盤面チェック or 生成（確実）
-  setTimeout(() => {
-    document.getElementById("opening").style.display = "none";
-    document.getElementById("mode-select").style.display = "block";
-    updateBrainUI();
-    checkForDataOrShowUpdateButton();
+ // 6. 演出終了 → 本体表示 & 盤面チェック or 生成（確実）
+setTimeout(async () => {
+  document.getElementById("opening").style.display = "none";
+  document.getElementById("mode-select").style.display = "block";
+  updateBrainUI();
 
-    // 盤面データが無い場合、自動生成
-    const currentWeek = getCurrentWeek();
-    const isMissing = DIFFICULTIES.some(level =>
-      !localStorage.getItem(`puzzles_${level}_${currentWeek}`) ||
-      !localStorage.getItem(`solutions_${level}_${currentWeek}`)
-    );
+  const currentWeek = getCurrentWeek();
+  const isMissing = DIFFICULTIES.some(level =>
+    !localStorage.getItem(`puzzles_${level}_${currentWeek}`) ||
+    !localStorage.getItem(`solutions_${level}_${currentWeek}`)
+  );
 
-    if (isMissing) {
-      generatePuzzlesForAllModes();
-    }
+  if (isMissing) {
+    await generatePuzzlesForAllModes(); // ← ここ重要！待つ！
+  }
 
-    // 少し待ってから読み込み
-    setTimeout(() => {
-      loadAllPuzzles?.();
-    }, 200);
-  }, 12000);
-};
+  loadAllPuzzles(); // ← 必ずあとに呼ぶ
+  checkForDataOrShowUpdateButton();
+}, 12000); // ← 12秒後で変えなくてOK
 function loadAllPuzzles() {
   const week = getCurrentWeek();
   DIFFICULTIES.forEach(level => {
