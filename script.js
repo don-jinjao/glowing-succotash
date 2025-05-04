@@ -648,18 +648,23 @@ function giveUp() {
 }
 function manualUpdate() {
   const modal = document.getElementById("ad-modal");
-  modal.style.display = "block"; // 広告風のモーダル表示（例：ロゴや画像入り）
+  if (modal) {
+    modal.style.display = "block"; // 広告モーダル表示
 
-  // 30秒後に盤面再生成 → モーダル閉じる → メニュー復帰
-  setTimeout(() => {
-    modal.style.display = "none";
-    
-    const week = getCurrentWeek();
-    DIFFICULTIES.forEach(level => {
-      localStorage.removeItem(`puzzles_${level}_${week}`);
-      localStorage.removeItem(`solutions_${level}_${week}`);
-    });
+    // 30秒後にデータ削除＆リロード
+    setTimeout(() => {
+      modal.style.display = "none";
 
-    location.reload(); // リロードで新しい盤面＆トップ画面へ
-  }, 30000);
+      const week = getCurrentWeek();
+      DIFFICULTIES.forEach(level => {
+        localStorage.removeItem(`puzzles_${level}_${week}`);
+        localStorage.removeItem(`solutions_${level}_${week}`);
+      });
+
+      location.reload(); // リロードで新しい盤面生成＆トップ画面へ
+    }, 30000);
+  } else {
+    // fallback用（広告なし環境では直接再生成）
+    generateAndReload();
+  }
 }
