@@ -209,63 +209,62 @@ function getTitleFromBrainCount(count) {
 }
 
 window.onload = function () {
-  generatePuzzlesForAllModes(); // オープニング中に盤面生成を開始
- 
+  generatePuzzlesForAllModes(); // 先行して盤面生成を開始
+
   const logo = document.getElementById("logo");
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
 
-  // 1. ロゴ降下 → 軽くバウンド
+  // 1. ロゴ降下 → ゆっくりバウンド
   logo.style.top = "25vh";
-  logo.style.transition = "top 1.2s ease-out";
+  logo.style.transition = "top 1.5s ease-out";
   setTimeout(() => {
     logo.style.transition = "transform 0.3s ease-out";
     logo.style.transform = "translateX(-50%) translateY(-10px)";
-  }, 1200);
+  }, 1500);
   setTimeout(() => {
     logo.style.transform = "translateX(-50%) translateY(0)";
-  }, 1500);
+  }, 1800);
 
-  // 2. ロゴ終了後1秒 → タイトルが左→右に走り込み
+  // 2. ロゴ静止後、タイトルが走り込み（待機時間延長＋ゆっくり）
   setTimeout(() => {
-    title.style.transition = "left 0.5s cubic-bezier(0.15, 1.6, 0.4, 1)";
+    title.style.transition = "left 0.8s cubic-bezier(0.15, 1.6, 0.4, 1)";
     title.style.left = "50%";
     title.style.transform = "translateX(-50%)";
-  }, 2500);
+  }, 3000);
 
-  // 3. 2秒静止 → ロゴとタイトルをフェードアウト
+  // 3. ロゴとタイトルをフェードアウト（+1秒）
   setTimeout(() => {
-    logo.style.transition = "opacity 0.8s ease";
-    title.style.transition = "opacity 0.8s ease";
+    logo.style.transition = "opacity 1s ease";
+    title.style.transition = "opacity 1s ease";
     logo.style.opacity = "0";
     title.style.opacity = "0";
-  }, 4500);
+  }, 5500);
 
-  // 4. ナンプレ画像：右下→左上にスワイプして登場
+  // 4. ナンプレ画像：右下→左上へ（ゆっくり）
   setTimeout(() => {
-    nampure.style.transition = "top 0.8s ease, left 0.8s ease, opacity 0.8s ease";
+    nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
     nampure.style.top = "10vh";
     nampure.style.left = "50%";
     nampure.style.opacity = "1";
-  }, 5300);
+  }, 6600);
 
-  // 5. 上部に1.5秒静止 → 左上へスワイプしてフェードアウト
+  // 5. 中央での静止時間を延長（＋1秒）
   setTimeout(() => {
-    nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
+    nampure.style.transition = "top 1.8s ease, left 1.8s ease, opacity 1.8s ease";
     nampure.style.top = "-100vh";
     nampure.style.left = "-100vw";
     nampure.style.opacity = "0";
-  }, 6800);
+  }, 10100);
 
-  // 6. 本編表示
+  // 6. 本編UI表示（遅らせる）
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-    generatePuzzlesForAllModes(); // ←毎回、初回表示時に生成！
     loadAllPuzzles?.();
-  }, 8200);
+  }, 12000);
 };
 function loadAllPuzzles() {
   const week = getCurrentWeek();
