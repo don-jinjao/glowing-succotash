@@ -261,7 +261,7 @@ window.onload = function () {
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-    checkForNewWeek();
+    generatePuzzlesForAllModes(); // ←毎回、初回表示時に生成！
     loadAllPuzzles?.();
   }, 8200);
 };
