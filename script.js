@@ -570,6 +570,8 @@ function checkAnswer() {
     }
   });
 
+  const resultBox = document.getElementById("result");
+
   if (isCorrect) {
     const clearTime = (Date.now() - window.startTime) / 1000;
     let stars = 1;
@@ -587,14 +589,62 @@ function checkAnswer() {
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
-    document.getElementById("result").className = "success";
-    document.getElementById("result").textContent = `正解！⭐️${stars}つ獲得！`;
+    resultBox.className = "success";
+    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${stars}つ獲得！`;
+
+    createSparkles(); // ←キラキラ演出
+
+    setTimeout(() => {
+      document.getElementById("game-screen").style.display = "none";
+      document.getElementById("mode-select").style.display = "block";
+      resultBox.textContent = "";
+      updateBrainUI();
+    }, 2500);
+
   } else {
-    document.getElementById("result").className = "fail";
-    document.getElementById("result").textContent = "間違いがあります。もう一度見直してね。";
+    resultBox.className = "fail";
+    resultBox.textContent = "間違いがあります。もう一度見直してね。";
   }
 }
 
+// 外に置く
+function createSparkles() {
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.top = 0;
+  container.style.left = 0;
+  container.style.width = "100%";
+  container.style.height = "100%";
+  container.style.pointerEvents = "none";
+  container.style.zIndex = 9999;
+  document.body.appendChild(container);
+
+  for (let i = 0; i < 80; i++) {
+    const sparkle = document.createElement("div");
+    sparkle.style.position = "absolute";
+    sparkle.style.width = "8px";
+    sparkle.style.height = "8px";
+    sparkle.style.background = "gold";
+    sparkle.style.borderRadius = "50%";
+    sparkle.style.left = `${Math.random() * 100}%`;
+    sparkle.style.top = `${Math.random() * 100}%`;
+    sparkle.style.opacity = 0;
+    sparkle.style.transform = "scale(0.5)";
+    sparkle.style.transition = "all 1s ease-out";
+    container.appendChild(sparkle);
+
+    setTimeout(() => {
+      sparkle.style.opacity = 1;
+      sparkle.style.transform = `translateY(-100px) scale(1)`;
+      sparkle.style.opacity = 0;
+    }, 10 + i * 10);
+  }
+
+  // 2秒後に削除
+  setTimeout(() => {
+    container.remove();
+  }, 2000);
+}
 function giveUp() {
   // 現在の画面非表示、諦めメッセージ表示
   document.getElementById("game-screen").style.display = "none";
