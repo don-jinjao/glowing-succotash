@@ -251,3 +251,7 @@ button:disabled {
 #result.fail {
   display: block;
 }
+#update-note {
+  font-size: 0.7em !important;
+  font-family: 'Arial', sans-serif;
+}
