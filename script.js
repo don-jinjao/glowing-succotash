@@ -314,7 +314,7 @@ function renderSheetList(mode) {
     button.style.margin = "8px";
 
     // 星の取得数を取得
-    const key = `${mode}_${i}_v${getCurrentWeek()}`;
+    const key = `${mode}_${i}_v${getCurrentVersion()}`;
     const stars = starsData[key] || 0;
 
     // 星表示のラッパー
