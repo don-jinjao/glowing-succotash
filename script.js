@@ -209,6 +209,8 @@ function getTitleFromBrainCount(count) {
 }
 
 window.onload = function () {
+  generatePuzzlesForAllModes(); // オープニング中に盤面生成を開始
+ 
   const logo = document.getElementById("logo");
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
