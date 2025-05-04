@@ -208,37 +208,54 @@ function getTitleFromBrainCount(count) {
   return "初心者";
 }
 
-window.onload = function() {
-  // Opening 演出開始
+window.onload = function () {
   const logo = document.getElementById("logo");
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
 
+  // 1. ロゴ降下 → 軽くバウンド
   logo.style.top = "25vh";
+  logo.style.transition = "top 1.2s ease-out";
   setTimeout(() => {
-    logo.style.transform = "translateX(-50%) rotate(45deg)";
-  }, 2000);
+    logo.style.transition = "transform 0.3s ease-out";
+    logo.style.transform = "translateX(-50%) translateY(-10px)";
+  }, 1200);
+  setTimeout(() => {
+    logo.style.transform = "translateX(-50%) translateY(0)";
+  }, 1500);
 
+  // 2. ロゴ終了後1秒 → タイトルが左→右に走り込み
   setTimeout(() => {
+    title.style.transition = "left 0.5s cubic-bezier(0.15, 1.6, 0.4, 1)";
     title.style.left = "50%";
     title.style.transform = "translateX(-50%)";
-  }, 2200);
+  }, 2500);
 
+  // 3. 2秒静止 → ロゴとタイトルをフェードアウト
   setTimeout(() => {
+    logo.style.transition = "opacity 0.8s ease";
+    title.style.transition = "opacity 0.8s ease";
     logo.style.opacity = "0";
     title.style.opacity = "0";
-  }, 4000);
+  }, 4500);
 
+  // 4. ナンプレ画像：右下→左上にスワイプして登場
   setTimeout(() => {
+    nampure.style.transition = "top 0.8s ease, left 0.8s ease, opacity 0.8s ease";
     nampure.style.top = "10vh";
+    nampure.style.left = "50%";
     nampure.style.opacity = "1";
-  }, 4300);
+  }, 5300);
 
+  // 5. 上部に1.5秒静止 → 左上へスワイプしてフェードアウト
   setTimeout(() => {
+    nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
     nampure.style.top = "-100vh";
+    nampure.style.left = "-100vw";
     nampure.style.opacity = "0";
-  }, 6300);
+  }, 6800);
 
+  // 6. 本編表示
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
@@ -246,9 +263,8 @@ window.onload = function() {
     checkForDataOrShowUpdateButton();
     checkForNewWeek();
     loadAllPuzzles?.();
-  }, 6800);
+  }, 8200);
 };
-
 function loadAllPuzzles() {
   const week = getCurrentWeek();
   DIFFICULTIES.forEach(level => {
