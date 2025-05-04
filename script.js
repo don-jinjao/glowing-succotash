@@ -644,30 +644,19 @@ function giveUp() {
   }, 2500);
 }
 function manualUpdate() {
-  // モーダル表示
   const modal = document.getElementById("ad-modal");
-  const countdownText = document.getElementById("ad-countdown");
-  modal.style.display = "block";
+  modal.style.display = "block"; // 広告風のモーダル表示（例：ロゴや画像入り）
 
-  // カウントダウン開始
-  let secondsLeft = 30;
-  countdownText.textContent = `あと${secondsLeft}秒`;
-  const countdownInterval = setInterval(() => {
-    secondsLeft--;
-    countdownText.textContent = `あと${secondsLeft}秒`;
-    if (secondsLeft <= 0) clearInterval(countdownInterval);
-  }, 1000);
-
-  // 30秒後に更新処理へ
+  // 30秒後に盤面再生成 → モーダル閉じる → メニュー復帰
   setTimeout(() => {
     modal.style.display = "none";
-
+    
     const week = getCurrentWeek();
     DIFFICULTIES.forEach(level => {
       localStorage.removeItem(`puzzles_${level}_${week}`);
       localStorage.removeItem(`solutions_${level}_${week}`);
     });
 
-    location.reload(); // リロードで新盤面反映
+    location.reload(); // リロードで新しい盤面＆トップ画面へ
   }, 30000);
 }
