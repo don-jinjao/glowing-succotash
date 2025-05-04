@@ -415,51 +415,8 @@ function startGame(mode, index) {
   const checkBtn = document.getElementById("check-answer-btn");
   checkBtn.style.display = "inline-block";
   checkBtn.onclick = () => {
-    const cells = board.querySelectorAll("td");
-    let isCorrect = true;
-
-    for (let cell of cells) {
-      const row = parseInt(cell.dataset.row);
-      const col = parseInt(cell.dataset.col);
-      if (!cell.classList.contains("fixed")) {
-        const input = parseInt(cell.textContent.trim());
-        if (input !== solution[row][col]) {
-          isCorrect = false;
-          cell.style.backgroundColor = "#fdd";
-        } else {
-          cell.style.backgroundColor = "#dfd";
-        }
-      }
-    }
-
-    if (isCorrect) {
-      alert("正解！お見事！");
-
-      const clearTime = (Date.now() - window.startTime) / 1000;
-      let stars = 1;
-      if (clearTime <= 180) {
-        stars = 3;
-      } else if (clearTime <= 600) {
-        stars = 2;
-      }
-
-      const key = `${mode}_${index}`;
-      starsData[key] = stars;
-      localStorage.setItem("starsData", JSON.stringify(starsData));
-
-      if (mode === "hard" && stars === 3) brainCount += 1;
-      if (mode === "toudai") brainCount += 1;
-      if (mode === "stanford") brainCount += stars;
-
-      localStorage.setItem("brainCount", brainCount);
-      updateBrainUI();
-
-      alert(`⭐️${stars}つ獲得！`);
-    } else {
-      alert("間違いがあります。もう一度見直してね。");
-    }
-  };
-
+  checkAnswer();
+};
   // あきらめボタン（←これが今回の追加ポイント）
   const giveUpBtn = document.getElementById("give-up-btn");
   giveUpBtn.style.display = "inline-block";
