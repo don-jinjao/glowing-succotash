@@ -546,25 +546,27 @@ function checkAnswer() {
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
+    // 中央に表示（ここが改良点！）
     resultBox.className = "success";
     resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${stars}つ獲得！`;
+    resultBox.style.display = "block";
 
-    createSparkles(); // ←キラキラ演出
+    createSparkles();
 
     setTimeout(() => {
       document.getElementById("game-screen").style.display = "none";
       document.getElementById("mode-select").style.display = "block";
       resultBox.textContent = "";
+      resultBox.style.display = "none";
       updateBrainUI();
     }, 2500);
 
   } else {
     resultBox.className = "fail";
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
+    resultBox.style.display = "block"; // ← 間違い時も中央表示
   }
 }
-
-// 外に置く
 function createSparkles() {
   const container = document.createElement("div");
   container.style.position = "fixed";
