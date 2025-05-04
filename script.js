@@ -546,7 +546,6 @@ function checkAnswer() {
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
-    // 中央に表示（ここが改良点！）
     resultBox.className = "success";
     resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${stars}つ獲得！`;
     resultBox.style.display = "block";
@@ -564,7 +563,13 @@ function checkAnswer() {
   } else {
     resultBox.className = "fail";
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
-    resultBox.style.display = "block"; // ← 間違い時も中央表示
+    resultBox.style.display = "block";
+
+    // 3秒後に文字を消す（盤面そのまま）
+    setTimeout(() => {
+      resultBox.textContent = "";
+      resultBox.style.display = "none";
+    }, 3000);
   }
 }
 function createSparkles() {
