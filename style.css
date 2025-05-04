@@ -159,16 +159,6 @@ button:disabled {
 #manual-update-btn:hover {
   background-color: #558b2f;
 }
-#update-note {
-  font-size: 0.85em;
-  color: #555;
-  margin-top: 10px;
-  line-height: 1.6;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
 
 /* 寄せ書きコメント */
 .update-comment {
@@ -191,17 +181,7 @@ button:disabled {
   text-align: center;
 }
 
-/* 更新ノートと寄せ書きの幅・バランス調整 */
-#update-note {
-  font-size: 0.7em; /* ← 小さくしたいならここを調整 */
-  color: #555;
-  margin-top: 5px;
-  line-height: 1.4;
-  max-width: 90%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
+
 
 /* スマホ向け画面最適化 */
 #game-screen {
