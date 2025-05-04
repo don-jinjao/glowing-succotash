@@ -535,7 +535,7 @@ function checkAnswer() {
     if (clearTime <= 180) stars = 3;
     else if (clearTime <= 600) stars = 2;
 
-    const key = `${mode}_${index}`;
+    const key = `${mode}_${index}_v${getCurrentWeek()}`;
     starsData[key] = stars;
     localStorage.setItem("starsData", JSON.stringify(starsData));
 
