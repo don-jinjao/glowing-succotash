@@ -126,37 +126,21 @@ function deleteOldWeekData(currentWeek) {
 
 function checkForDataOrShowUpdateButton() {
   const week = getCurrentWeek();
+  const hasData = DIFFICULTIES.every(level =>
+    localStorage.getItem(`puzzles_${level}_${week}`) &&
+    localStorage.getItem(`solutions_${level}_${week}`)
+  );
+
   const updateBtn = document.getElementById("manual-update-btn");
+  const updateArea = document.getElementById("update-area");
 
-  let isMissing = false;
-
-  for (const level of DIFFICULTIES) {
-    const puzzleKey = `puzzles_${level}_${week}`;
-    const solutionKey = `solutions_${level}_${week}`;
-
-    const puzzles = localStorage.getItem(puzzleKey);
-    const solutions = localStorage.getItem(solutionKey);
-
-    if (!puzzles || !solutions) {
-      isMissing = true;
-      break;
-    }
-
-    try {
-      const parsedPuzzles = JSON.parse(puzzles);
-      const parsedSolutions = JSON.parse(solutions);
-      if (!Array.isArray(parsedPuzzles) || parsedPuzzles.length === 0 ||
-          !Array.isArray(parsedSolutions) || parsedSolutions.length === 0) {
-        isMissing = true;
-        break;
-      }
-    } catch (e) {
-      isMissing = true;
-      break;
-    }
+  if (!hasData) {
+    updateArea.style.display = "block";       // ← 親を表示
+    updateBtn.style.display = "inline-block"; // ← ボタンを表示
+  } else {
+    updateArea.style.display = "none";        // ← 親ごと非表示
+    updateBtn.style.display = "none";
   }
-
-  updateBtn.style.display = isMissing ? "inline-block" : "none";
 }
 function generateAndReload() {
   const updateBtn = document.getElementById("manual-update-btn");
