@@ -510,6 +510,7 @@ function checkAnswer() {
   const mode = document.getElementById("game-title").textContent.split("モード")[0];
   const indexText = document.getElementById("game-title").textContent.match(/No\.(\d+)/);
   const index = indexText ? parseInt(indexText[1], 10) - 1 : 0;
+  const key = `${mode}_${index}`;
 
   const solution = window.solutionData?.[mode]?.[index];
 
@@ -531,19 +532,36 @@ function checkAnswer() {
 
   if (isCorrect) {
     const clearTime = (Date.now() - window.startTime) / 1000;
+
+    // 星評価
     let stars = 1;
     if (clearTime <= 180) stars = 3;
     else if (clearTime <= 600) stars = 2;
 
-    const key = `${mode}_${index}`;
-    starsData[key] = stars;
-    localStorage.setItem("starsData", JSON.stringify(starsData));
+    const oldStars = starsData[key] || 0;
+    if (stars > oldStars) {
+      starsData[key] = stars;
+      localStorage.setItem("starsData", JSON.stringify(starsData));
+    }
 
-    if (mode === "hard" && stars === 3) brainCount++;
-    if (mode === "toudai") brainCount++;
-    if (mode === "stanford") brainCount += stars;
+    // 脳評価（モードごとの上限管理）
+    const oldBrain = parseInt(localStorage.getItem(`brain_${key}`) || "0");
+    let brainToAdd = 0;
 
-    localStorage.setItem("brainCount", brainCount);
+    if (mode === "hard" && stars === 3 && oldBrain < 1) {
+      brainToAdd = 1;
+    } else if (mode === "toudai" && oldBrain < 3) {
+      brainToAdd = 1;
+    } else if (mode === "stanford" && oldBrain < 3) {
+      brainToAdd = Math.min(stars, 3 - oldBrain);
+    }
+
+    if (brainToAdd > 0) {
+      brainCount += brainToAdd;
+      localStorage.setItem("brainCount", brainCount);
+      localStorage.setItem(`brain_${key}`, oldBrain + brainToAdd);
+    }
+
     updateBrainUI();
 
     resultBox.className = "success";
@@ -565,7 +583,6 @@ function checkAnswer() {
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
     resultBox.style.display = "block";
 
-    // 3秒後に文字を消す（盤面そのまま）
     setTimeout(() => {
       resultBox.textContent = "";
       resultBox.style.display = "none";
