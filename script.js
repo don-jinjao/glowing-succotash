@@ -314,7 +314,7 @@ function renderSheetList(mode) {
     button.style.margin = "8px";
 
     // 星の取得数を取得
-    const key = `${mode}_${i}_v${getCurrentVersion()}`;
+    const key = `${mode}_${i}_v${getCurrentWeek()}`;
     const stars = starsData[key] || 0;
 
     // 星表示のラッパー
@@ -640,14 +640,4 @@ function giveUp() {
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI(); // 称号や脳数も更新
   }, 2500);
-}
-// ⭐️バージョン読み取り関数（1）
-function getCurrentVersion() {
-  return parseInt(localStorage.getItem("currentVersion") || "0");
-}
-
-// ⭐️バージョン加算関数（2）
-function incrementVersion() {
-  const current = getCurrentVersion();
-  localStorage.setItem("currentVersion", current + 1);
 }
