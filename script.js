@@ -185,6 +185,16 @@ function updateBrainUI() {
     stanfordNote.textContent = "※🧠50個以上で解放されます";
   }
 }
+
+function manualUpdate() {
+  const loadingText = document.getElementById("update-loading");
+  loadingText.style.display = "block";
+  setTimeout(() => {
+    generateAndReload();
+    loadingText.style.display = "none";
+  }, 300);
+}
+
 function getTotalStars() {
   return Object.values(starsData).reduce((sum, val) => sum + val, 0);
 }
@@ -203,67 +213,58 @@ window.onload = function () {
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
 
-  // 1. ロゴ降下 → ゆっくりバウンド
+  // 1. ロゴ降下 → 軽くバウンド
   logo.style.top = "25vh";
-  logo.style.transition = "top 1.5s ease-out";
+  logo.style.transition = "top 1.2s ease-out";
   setTimeout(() => {
     logo.style.transition = "transform 0.3s ease-out";
     logo.style.transform = "translateX(-50%) translateY(-10px)";
-  }, 1500);
+  }, 1200);
   setTimeout(() => {
     logo.style.transform = "translateX(-50%) translateY(0)";
-  }, 1800);
+  }, 1500);
 
-  // 2. タイトル走り込み
+  // 2. ロゴ終了後1秒 → タイトルが左→右に走り込み
   setTimeout(() => {
-    title.style.transition = "left 0.8s cubic-bezier(0.15, 1.6, 0.4, 1)";
+    title.style.transition = "left 0.5s cubic-bezier(0.15, 1.6, 0.4, 1)";
     title.style.left = "50%";
     title.style.transform = "translateX(-50%)";
-  }, 3000);
+  }, 2500);
 
-  // 3. ロゴとタイトルをフェードアウト
+  // 3. 2秒静止 → ロゴとタイトルをフェードアウト
   setTimeout(() => {
-    logo.style.transition = "opacity 1s ease";
-    title.style.transition = "opacity 1s ease";
+    logo.style.transition = "opacity 0.8s ease";
+    title.style.transition = "opacity 0.8s ease";
     logo.style.opacity = "0";
     title.style.opacity = "0";
-  }, 5500);
+  }, 4500);
 
-  // 4. ナンプレ画像スワイプ
+  // 4. ナンプレ画像：右下→左上にスワイプして登場
   setTimeout(() => {
-    nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
+    nampure.style.transition = "top 0.8s ease, left 0.8s ease, opacity 0.8s ease";
     nampure.style.top = "10vh";
     nampure.style.left = "50%";
     nampure.style.opacity = "1";
-  }, 6600);
+  }, 5300);
 
-  // 5. スワイプ退場
+  // 5. 上部に1.5秒静止 → 左上へスワイプしてフェードアウト
   setTimeout(() => {
-    nampure.style.transition = "top 1.8s ease, left 1.8s ease, opacity 1.8s ease";
+    nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
     nampure.style.top = "-100vh";
     nampure.style.left = "-100vw";
     nampure.style.opacity = "0";
-  }, 10100);
+  }, 6800);
 
- // 6. 演出終了 → 本体表示 & 盤面チェック or 生成（確実）
-setTimeout(async () => {
-  document.getElementById("opening").style.display = "none";
-  document.getElementById("mode-select").style.display = "block";
-  updateBrainUI();
-
-  const currentWeek = getCurrentWeek();
-  const isMissing = DIFFICULTIES.some(level =>
-    !localStorage.getItem(`puzzles_${level}_${currentWeek}`) ||
-    !localStorage.getItem(`solutions_${level}_${currentWeek}`)
-  );
-
-  if (isMissing) {
-    await generatePuzzlesForAllModes(); // ← ここ重要！待つ！
-  }
-
-  loadAllPuzzles(); // ← 必ずあとに呼ぶ
-  checkForDataOrShowUpdateButton();
-}, 12000); // ← 12秒後で変えなくてOK
+  // 6. 本編表示
+  setTimeout(() => {
+    document.getElementById("opening").style.display = "none";
+    document.getElementById("mode-select").style.display = "block";
+    updateBrainUI();
+    checkForDataOrShowUpdateButton();
+    generatePuzzlesForAllModes(); // ←毎回、初回表示時に生成！
+    loadAllPuzzles?.();
+  }, 8200);
+};
 function loadAllPuzzles() {
   const week = getCurrentWeek();
   DIFFICULTIES.forEach(level => {
@@ -509,7 +510,6 @@ function checkAnswer() {
   const mode = document.getElementById("game-title").textContent.split("モード")[0];
   const indexText = document.getElementById("game-title").textContent.match(/No\.(\d+)/);
   const index = indexText ? parseInt(indexText[1], 10) - 1 : 0;
-  const key = `${mode}_${index}`;
 
   const solution = window.solutionData?.[mode]?.[index];
 
@@ -531,36 +531,19 @@ function checkAnswer() {
 
   if (isCorrect) {
     const clearTime = (Date.now() - window.startTime) / 1000;
-
-    // 星評価
     let stars = 1;
     if (clearTime <= 180) stars = 3;
     else if (clearTime <= 600) stars = 2;
 
-    const oldStars = starsData[key] || 0;
-    if (stars > oldStars) {
-      starsData[key] = stars;
-      localStorage.setItem("starsData", JSON.stringify(starsData));
-    }
+    const key = `${mode}_${index}`;
+    starsData[key] = stars;
+    localStorage.setItem("starsData", JSON.stringify(starsData));
 
-    // 脳評価（モードごとの上限管理）
-    const oldBrain = parseInt(localStorage.getItem(`brain_${key}`) || "0");
-    let brainToAdd = 0;
+    if (mode === "hard" && stars === 3) brainCount++;
+    if (mode === "toudai") brainCount++;
+    if (mode === "stanford") brainCount += stars;
 
-    if (mode === "hard" && stars === 3 && oldBrain < 1) {
-      brainToAdd = 1;
-    } else if (mode === "toudai" && oldBrain < 3) {
-      brainToAdd = 1;
-    } else if (mode === "stanford" && oldBrain < 3) {
-      brainToAdd = Math.min(stars, 3 - oldBrain);
-    }
-
-    if (brainToAdd > 0) {
-      brainCount += brainToAdd;
-      localStorage.setItem("brainCount", brainCount);
-      localStorage.setItem(`brain_${key}`, oldBrain + brainToAdd);
-    }
-
+    localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
     resultBox.className = "success";
@@ -582,6 +565,7 @@ function checkAnswer() {
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
     resultBox.style.display = "block";
 
+    // 3秒後に文字を消す（盤面そのまま）
     setTimeout(() => {
       resultBox.textContent = "";
       resultBox.style.display = "none";
@@ -642,24 +626,30 @@ function giveUp() {
   }, 2500);
 }
 function manualUpdate() {
+  // モーダル表示
   const modal = document.getElementById("ad-modal");
-  if (modal) {
-    modal.style.display = "block"; // 広告モーダル表示
+  const countdownText = document.getElementById("ad-countdown");
+  modal.style.display = "block";
 
-    // 30秒後にデータ削除＆リロード
-    setTimeout(() => {
-      modal.style.display = "none";
+  // カウントダウン開始
+  let secondsLeft = 30;
+  countdownText.textContent = `あと${secondsLeft}秒`;
+  const countdownInterval = setInterval(() => {
+    secondsLeft--;
+    countdownText.textContent = `あと${secondsLeft}秒`;
+    if (secondsLeft <= 0) clearInterval(countdownInterval);
+  }, 1000);
 
-      const week = getCurrentWeek();
-      DIFFICULTIES.forEach(level => {
-        localStorage.removeItem(`puzzles_${level}_${week}`);
-        localStorage.removeItem(`solutions_${level}_${week}`);
-      });
+  // 30秒後に更新処理へ
+  setTimeout(() => {
+    modal.style.display = "none";
 
-      location.reload(); // リロードで新しい盤面生成＆トップ画面へ
-    }, 30000);
-  } else {
-    // fallback用（広告なし環境では直接再生成）
-    generateAndReload();
-  }
+    const week = getCurrentWeek();
+    DIFFICULTIES.forEach(level => {
+      localStorage.removeItem(`puzzles_${level}_${week}`);
+      localStorage.removeItem(`solutions_${level}_${week}`);
+    });
+
+    location.reload(); // リロードで新盤面反映
+  }, 30000);
 }
