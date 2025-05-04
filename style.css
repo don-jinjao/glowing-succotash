@@ -232,3 +232,7 @@ button:disabled {
   background-color: white;
   cursor: pointer;
 }
+@keyframes sparkleAnim {
+  0% { transform: scale(0.5) translateY(0); opacity: 1; }
+  100% { transform: scale(1.5) translateY(-50px); opacity: 0; }
+}
