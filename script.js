@@ -261,7 +261,7 @@ window.onload = function () {
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-    generatePuzzlesForAllModes(); // ←毎回、初回表示時に生成！
+    checkForNewWeek();
     loadAllPuzzles?.();
   }, 8200);
 };
@@ -626,30 +626,20 @@ function giveUp() {
   }, 2500);
 }
 function manualUpdate() {
-  // モーダル表示
-  const modal = document.getElementById("ad-modal");
-  const countdownText = document.getElementById("ad-countdown");
-  modal.style.display = "block";
+  // ① 広告モーダルを表示
+  document.getElementById("ad-modal").style.display = "block";
 
-  // カウントダウン開始
-  let secondsLeft = 30;
-  countdownText.textContent = `あと${secondsLeft}秒`;
-  const countdownInterval = setInterval(() => {
-    secondsLeft--;
-    countdownText.textContent = `あと${secondsLeft}秒`;
-    if (secondsLeft <= 0) clearInterval(countdownInterval);
-  }, 1000);
-
-  // 30秒後に更新処理へ
+  // ② 30秒後に非表示＆本来の更新処理を実行
   setTimeout(() => {
-    modal.style.display = "none";
+    document.getElementById("ad-modal").style.display = "none";
 
+    // 本来の更新処理ここから
     const week = getCurrentWeek();
     DIFFICULTIES.forEach(level => {
       localStorage.removeItem(`puzzles_${level}_${week}`);
       localStorage.removeItem(`solutions_${level}_${week}`);
     });
 
-    location.reload(); // リロードで新盤面反映
-  }, 30000);
+    location.reload(); // 画面リロードして反映
+  }, 30000); // 30秒（30000ミリ秒）
 }
