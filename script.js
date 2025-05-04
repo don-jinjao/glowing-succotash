@@ -296,7 +296,7 @@ function loadAllPuzzles() {
 
 function renderSheetList(mode) {
   const sheetList = document.getElementById("sheet-list");
-  sheetList.innerHTML = ""; // 前の内容をクリア
+  sheetList.innerHTML = "";
 
   const puzzles = window.puzzleData?.[mode];
   if (!puzzles || puzzles.length === 0) {
@@ -309,8 +309,25 @@ function renderSheetList(mode) {
   for (let i = 0; i < count; i++) {
     const button = document.createElement("button");
     button.textContent = `No.${i + 1}`;
-    button.onclick = () => startGame(mode, i); // ゲーム開始関数に渡す
+    button.onclick = () => startGame(mode, i);
+    button.style.position = "relative"; // 星の絶対配置に必要
     button.style.margin = "8px";
+
+    // 星の取得数を取得
+    const key = `${mode}_${i}_v${getCurrentWeek()}`;
+    const stars = starsData[key] || 0;
+
+    // 星表示のラッパー
+    const starWrapper = document.createElement("div");
+    starWrapper.className = "star-wrapper";
+
+    for (let j = 0; j < 3; j++) {
+      const star = document.createElement("span");
+      star.textContent = j < stars ? "⭐️" : "☆";
+      starWrapper.appendChild(star);
+    }
+
+    button.appendChild(starWrapper);
     sheetList.appendChild(button);
   }
 
@@ -318,7 +335,6 @@ function renderSheetList(mode) {
   document.getElementById("sheet-title").textContent = `${mode}モードの問題を選んでね`;
   document.getElementById("sheet-select").style.display = "block";
 }
-
 function selectMode(mode) {
   const puzzles = window.puzzleData?.[mode];
   if (!puzzles || puzzles.length === 0) {
