@@ -626,20 +626,30 @@ function giveUp() {
   }, 2500);
 }
 function manualUpdate() {
-  // ① 広告モーダルを表示
-  document.getElementById("ad-modal").style.display = "block";
+  // モーダル表示
+  const modal = document.getElementById("ad-modal");
+  const countdownText = document.getElementById("ad-countdown");
+  modal.style.display = "block";
 
-  // ② 30秒後に非表示＆本来の更新処理を実行
+  // カウントダウン開始
+  let secondsLeft = 30;
+  countdownText.textContent = `あと${secondsLeft}秒`;
+  const countdownInterval = setInterval(() => {
+    secondsLeft--;
+    countdownText.textContent = `あと${secondsLeft}秒`;
+    if (secondsLeft <= 0) clearInterval(countdownInterval);
+  }, 1000);
+
+  // 30秒後に更新処理へ
   setTimeout(() => {
-    document.getElementById("ad-modal").style.display = "none";
+    modal.style.display = "none";
 
-    // 本来の更新処理ここから
     const week = getCurrentWeek();
     DIFFICULTIES.forEach(level => {
       localStorage.removeItem(`puzzles_${level}_${week}`);
       localStorage.removeItem(`solutions_${level}_${week}`);
     });
 
-    location.reload(); // 画面リロードして反映
-  }, 30000); // 30秒（30000ミリ秒）
+    location.reload(); // リロードで新盤面反映
+  }, 30000);
 }
