@@ -209,8 +209,6 @@ function getTitleFromBrainCount(count) {
 }
 
 window.onload = function () {
-  generatePuzzlesForAllModes(); // 盤面生成を先に開始！
-
   const logo = document.getElementById("logo");
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
@@ -226,7 +224,7 @@ window.onload = function () {
     logo.style.transform = "translateX(-50%) translateY(0)";
   }, 1800);
 
-  // 2. タイトル走り込み（少し後に、ゆっくり）
+  // 2. タイトル走り込み
   setTimeout(() => {
     title.style.transition = "left 0.8s cubic-bezier(0.15, 1.6, 0.4, 1)";
     title.style.left = "50%";
@@ -241,7 +239,7 @@ window.onload = function () {
     title.style.opacity = "0";
   }, 5500);
 
-  // 4. ナンプレ画像：右下→左上へスワイプ登場
+  // 4. ナンプレ画像スワイプ
   setTimeout(() => {
     nampure.style.transition = "top 1.2s ease, left 1.2s ease, opacity 1.2s ease";
     nampure.style.top = "10vh";
@@ -249,7 +247,7 @@ window.onload = function () {
     nampure.style.opacity = "1";
   }, 6600);
 
-  // 5. 中央での静止時間を延長（+1秒）
+  // 5. スワイプ退場
   setTimeout(() => {
     nampure.style.transition = "top 1.8s ease, left 1.8s ease, opacity 1.8s ease";
     nampure.style.top = "-100vh";
@@ -257,14 +255,25 @@ window.onload = function () {
     nampure.style.opacity = "0";
   }, 10100);
 
-  // 6. 本編UI表示 ＋ データ読み込み（遅延付き）
+  // 6. 演出終了 → 本体表示 & 盤面チェック or 生成（確実）
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
 
-    // 200ms 待ってから読み込み（生成完了に猶予）
+    // 盤面データが無い場合、自動生成
+    const currentWeek = getCurrentWeek();
+    const isMissing = DIFFICULTIES.some(level =>
+      !localStorage.getItem(`puzzles_${level}_${currentWeek}`) ||
+      !localStorage.getItem(`solutions_${level}_${currentWeek}`)
+    );
+
+    if (isMissing) {
+      generatePuzzlesForAllModes();
+    }
+
+    // 少し待ってから読み込み
     setTimeout(() => {
       loadAllPuzzles?.();
     }, 200);
