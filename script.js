@@ -185,16 +185,6 @@ function updateBrainUI() {
     stanfordNote.textContent = "※🧠50個以上で解放されます";
   }
 }
-
-function manualUpdate() {
-  const loadingText = document.getElementById("update-loading");
-  loadingText.style.display = "block";
-  setTimeout(() => {
-    generateAndReload();
-    loadingText.style.display = "none";
-  }, 300);
-}
-
 function getTotalStars() {
   return Object.values(starsData).reduce((sum, val) => sum + val, 0);
 }
