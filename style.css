@@ -35,12 +35,12 @@ body {
 #nampure {
   position: absolute;
   top: 110vh;
-  left: 50%;
+  left: 110vw;
   transform: translateX(-50%);
   width: 90vw;
   max-width: 450px;
   opacity: 0;
-  transition: top 2s ease, opacity 1.5s ease;
+  transition: top 2s ease, left 2s ease, opacity 1.5s ease;
 }
 
 /* ボタン共通 */
