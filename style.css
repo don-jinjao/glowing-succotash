@@ -251,3 +251,6 @@ button:disabled {
   border-radius: 10px;
   display: none; /* 初期は非表示 */
 }
+#result.fail {
+  display: block;
+}
