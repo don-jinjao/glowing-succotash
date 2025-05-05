@@ -325,23 +325,26 @@ function renderSheetList(mode) {
   const star = document.createElement("span");
 
   if (mode === "toudai" || mode === "stanford") {
-    // 東大脳・スタンフォード脳はすべて脳マークで表示
+    // 東大脳・スタンフォード脳 → 常に🧠表示
     star.textContent = "🧠";
     if (j >= stars) {
       star.style.filter = "grayscale(100%) opacity(0.3)";
     }
+
   } else if (mode === "hard") {
-    // ハードモードは2つまで⭐️、3つ目は脳マーク
+    // ハード → ⭐️2つまで、それ以降は🧠
     if (j < 2) {
-      star.textContent = j < stars ? "⭐️" : "☆";
+      star.textContent = j < Math.min(stars, 2) ? "⭐️" : "☆";
     } else {
-      star.textContent = stars === 3 ? "🧠" : "🧠";
+      // 3つ目 → stars が3のときだけ🧠フル表示
+      star.textContent = "🧠";
       if (stars < 3) {
         star.style.filter = "grayscale(100%) opacity(0.3)";
       }
     }
+
   } else {
-    // それ以外は従来通りの星マーク
+    // 通常モード（easy/normalなど）→ ⭐️と☆
     star.textContent = j < stars ? "⭐️" : "☆";
   }
 
