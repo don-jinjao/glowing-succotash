@@ -573,26 +573,25 @@ function checkAnswer() {
     else if (clearTime <= 600) stars = 2;
 
     const key = `${mode}_${index}_v${getCurrentWeek()}`;
-    let starsToSave = stars;  // 保存用
+    let displayStars = stars;
 
-    // 脳加算と⭐️調整（仕様変更部分）
+    // 脳の処理
     if (mode === "hard") {
       if (stars === 3) {
         brainCount += 1;
-        starsToSave = 2;
+        displayStars = 2; // 星は2個にしておく
       }
     } else if (mode === "toudai" || mode === "stanford") {
       brainCount += stars;
-      starsToSave = 0;
     }
 
-    starsData[key] = Math.max(starsData[key] || 0, starsToSave);
+    starsData[key] = displayStars;
     localStorage.setItem("starsData", JSON.stringify(starsData));
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
     resultBox.className = "success";
-    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${stars}つ獲得！`;
+    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
     resultBox.style.display = "block";
 
     createSparkles();
@@ -604,6 +603,7 @@ function checkAnswer() {
       resultBox.style.display = "none";
       updateBrainUI();
     }, 2500);
+
   } else {
     resultBox.className = "fail";
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
