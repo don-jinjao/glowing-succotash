@@ -241,3 +241,20 @@ button:disabled {
   margin-right: auto;
   text-align: center;
 }
+.brain-wrapper {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 2px;
+}
+
+.brain-wrapper span {
+  font-size: 16px;
+}
+
+.brain-grayscale {
+  opacity: 0.3;
+  filter: grayscale(100%);
+}
