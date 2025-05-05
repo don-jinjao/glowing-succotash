@@ -70,27 +70,55 @@ function generatePuzzleWithHoles(board, holes) {
   return puzzle;
 }
 
-function generatePuzzlesForAllModes() {
+async function generatePuzzlesForAllModes() {
   const currentWeek = getCurrentWeek();
   const levels = {
-    easy: 25,
-    normal: 35,
-    hard: 45,
-    toudai: getRandomInRange([51, 54]),
-    stanford: getRandomInRange([53, 55])
+    easy: 25,        // 残り 56マス
+    normal: 35,      // 残り 46マス
+    hard: 50,        // 残り 31マス ← 強化
+    toudai: 55,      // 残り 26マス ← 強化
+    stanford: 60     // 残り 21マス ← 強化（最難関）
   };
 
   for (const level in levels) {
     const holes = levels[level];
+    const givens = 81 - holes;
     const count = level === "stanford" ? 5 : 10;
+
     const puzzles = [];
     const solutions = [];
 
     for (let i = 0; i < count; i++) {
-      const solution = generateFullBoard();
-      const puzzle = generatePuzzleWithHoles(solution, holes);
+      let puzzle = null;
+      let solution = null;
+      let success = false;
+
+      const start = performance.now();
+
+      for (let attempt = 0; attempt < 5; attempt++) {
+        try {
+          const result = await generatePuzzleWithTimeoutJS(givens, 15000);
+          if (result) {
+            puzzle = result.puzzle;
+            solution = result.solution;
+            success = true;
+            break;
+          }
+        } catch (e) {
+          console.warn(`生成エラー（${level} No.${i + 1}）:`, e);
+        }
+      }
+
+      if (!success) {
+        console.warn(`タイムアウトで生成失敗（${level} No.${i + 1}）→ スキップ`);
+        continue;
+      }
+
       puzzles.push(puzzle);
       solutions.push(solution);
+
+      const elapsed = ((performance.now() - start) / 1000).toFixed(2);
+      console.log(`${level} No.${i + 1}：${elapsed}秒で生成`);
     }
 
     localStorage.setItem(`puzzles_${level}_${currentWeek}`, JSON.stringify(puzzles));
@@ -98,7 +126,7 @@ function generatePuzzlesForAllModes() {
   }
 
   localStorage.setItem("lastGeneratedWeek", currentWeek);
-deleteOldWeekData(currentWeek);
+  deleteOldWeekData(currentWeek);
 }
 
 function getRandomInRange([min, max]) {
