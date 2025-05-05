@@ -69,7 +69,26 @@ function generatePuzzleWithHoles(board, holes) {
   }
   return puzzle;
 }
+function generatePuzzleWithTimeoutJS(givens, timeoutMs = 15000) {
+  return new Promise((resolve) => {
+    const start = Date.now();
 
+    function tryGenerate() {
+      const solution = generateFullBoard();
+      const puzzle = generatePuzzleWithHoles(solution, 81 - givens);
+
+      if (puzzle && Date.now() - start < timeoutMs) {
+        resolve({ puzzle, solution });
+      } else if (Date.now() - start < timeoutMs) {
+        setTimeout(tryGenerate, 50);
+      } else {
+        resolve(null);
+      }
+    }
+
+    tryGenerate();
+  });
+}
 async function generatePuzzlesForAllModes() {
   const currentWeek = getCurrentWeek();
   const levels = {
