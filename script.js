@@ -552,13 +552,21 @@ function checkAnswer() {
     else if (clearTime <= 600) stars = 2;
 
     const key = `${mode}_${index}_v${getCurrentWeek()}`;
-    starsData[key] = stars;
+    let starsToSave = stars;  // 保存用
+
+    // 脳加算と⭐️調整（仕様変更部分）
+    if (mode === "hard") {
+      if (stars === 3) {
+        brainCount += 1;
+        starsToSave = 2;
+      }
+    } else if (mode === "toudai" || mode === "stanford") {
+      brainCount += stars;
+      starsToSave = 0;
+    }
+
+    starsData[key] = Math.max(starsData[key] || 0, starsToSave);
     localStorage.setItem("starsData", JSON.stringify(starsData));
-
-    if (mode === "hard" && stars === 3) brainCount++;
-    if (mode === "toudai") brainCount++;
-    if (mode === "stanford") brainCount += stars;
-
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
@@ -575,13 +583,11 @@ function checkAnswer() {
       resultBox.style.display = "none";
       updateBrainUI();
     }, 2500);
-
   } else {
     resultBox.className = "fail";
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
     resultBox.style.display = "block";
 
-    // 3秒後に文字を消す（盤面そのまま）
     setTimeout(() => {
       resultBox.textContent = "";
       resultBox.style.display = "none";
