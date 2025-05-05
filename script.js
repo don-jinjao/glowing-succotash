@@ -322,10 +322,31 @@ function renderSheetList(mode) {
     starWrapper.className = "star-wrapper";
 
     for (let j = 0; j < 3; j++) {
-      const star = document.createElement("span");
-      star.textContent = j < stars ? "⭐️" : "☆";
-      starWrapper.appendChild(star);
+  const star = document.createElement("span");
+
+  if (mode === "toudai" || mode === "stanford") {
+    // 東大脳・スタンフォード脳はすべて脳マークで表示
+    star.textContent = "🧠";
+    if (j >= stars) {
+      star.style.filter = "grayscale(100%) opacity(0.3)";
     }
+  } else if (mode === "hard") {
+    // ハードモードは2つまで⭐️、3つ目は脳マーク
+    if (j < 2) {
+      star.textContent = j < stars ? "⭐️" : "☆";
+    } else {
+      star.textContent = stars === 3 ? "🧠" : "🧠";
+      if (stars < 3) {
+        star.style.filter = "grayscale(100%) opacity(0.3)";
+      }
+    }
+  } else {
+    // それ以外は従来通りの星マーク
+    star.textContent = j < stars ? "⭐️" : "☆";
+  }
+
+  starWrapper.appendChild(star);
+}
 
     button.appendChild(starWrapper);
     sheetList.appendChild(button);
