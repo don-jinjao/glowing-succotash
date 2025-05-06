@@ -186,6 +186,8 @@ function generateAndReload() {
 
   setTimeout(() => {
     generatePuzzlesForAllModes();
+    starsData = JSON.parse(localStorage.getItem("starsData") || "{}");
+　　　brainCount = parseInt(localStorage.getItem("brainCount") || "0", 10);
     loadAllPuzzles();
     updateBtn.textContent = "更新完了！再読み込みしてね";
   }, 300); // 短い待ち時間を入れて自然な動作感に
