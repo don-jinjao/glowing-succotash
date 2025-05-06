@@ -1,8 +1,6 @@
 const DIFFICULTIES = ["easy", "normal", "hard", "toudai", "stanford"];
 let brainCount = 0;
 let starsData = {};
-let currentMode = null;
-let currentIndex = null;
 function getCurrentWeek() {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -188,8 +186,6 @@ function generateAndReload() {
 
   setTimeout(() => {
     generatePuzzlesForAllModes();
-    starsData = JSON.parse(localStorage.getItem("starsData") || "{}");
-　　　brainCount = parseInt(localStorage.getItem("brainCount") || "0", 10);
     loadAllPuzzles();
     updateBtn.textContent = "更新完了！再読み込みしてね";
   }, 300); // 短い待ち時間を入れて自然な動作感に
@@ -420,9 +416,6 @@ function selectMode(mode) {
 }
 
 function startGame(mode, index) {
-  currentMode = mode;
-  currentIndex = index;
-  // （以下はそのまま）
   window.startTime = Date.now(); // ←【1】スタート時間記録
 
   const puzzle = window.puzzleData?.[mode]?.[index];
@@ -601,10 +594,12 @@ function checkAnswer() {
   const cells = board.querySelectorAll("td");
   let isCorrect = true;
 
-  const mode = currentMode;
-  const index = currentIndex;
+  const mode = document.getElementById("game-title").textContent.split("モード")[0];
+  const indexText = document.getElementById("game-title").textContent.match(/No\.(\d+)/);
+  const index = indexText ? parseInt(indexText[1], 10) - 1 : 0;
 
   const solution = window.solutionData?.[mode]?.[index];
+
   cells.forEach(cell => {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
