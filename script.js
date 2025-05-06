@@ -1,6 +1,8 @@
 const DIFFICULTIES = ["easy", "normal", "hard", "toudai", "stanford"];
 let brainCount = 0;
 let starsData = {};
+let currentMode = null;
+let currentIndex = null;
 function getCurrentWeek() {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);
