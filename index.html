@@ -50,8 +50,10 @@
   <button id="stanford-btn" disabled onclick="selectMode('stanford')">スタンフォード脳（🧠50個以上）</button>
 
 
+  <!-- ⭐️ボタン＋ポップアップを包むdivを追加 -->
+<div style="position: relative; display: inline-block;">
   <button id="star-info-btn" onclick="toggleStarInfo()">⭐️の評価基準</button>
-  <div id="star-info-popup" style="display:none; line-height: 1.8em; padding: 0.5em;">
+  <div id="star-info-popup">
     <p>⭐️3：3分以内にクリア</p>
     <p>⭐️2：10分以内にクリア</p>
     <p>⭐️1：とにかくクリア！</p>
