@@ -59,20 +59,12 @@ button:disabled {
   cursor: not-allowed;
 }
 #star-info-popup {
-  display: none;
+  margin-top: 10px;
   background: #fff;
-  padding: 12px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-  margin: 0 auto;
-  position: relative;
-  top: -20px;
-  margin-bottom: -10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  font-size: 15px;
-  line-height: 1.6;
+  border: 1px solid #ccc;
+  padding: 10px;
+  display: inline-block;
+  font-size: 0.9em;
 }
 
 /* 盤面スタイル */
