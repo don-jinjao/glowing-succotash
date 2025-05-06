@@ -598,12 +598,10 @@ function checkAnswer() {
   const cells = board.querySelectorAll("td");
   let isCorrect = true;
 
-  const mode = document.getElementById("game-title").textContent.split("モード")[0];
-  const indexText = document.getElementById("game-title").textContent.match(/No\.(\d+)/);
-  const index = indexText ? parseInt(indexText[1], 10) - 1 : 0;
+  const mode = currentMode;
+  const index = currentIndex;
 
   const solution = window.solutionData?.[mode]?.[index];
-
   cells.forEach(cell => {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
