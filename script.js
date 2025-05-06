@@ -420,6 +420,9 @@ function selectMode(mode) {
 }
 
 function startGame(mode, index) {
+  currentMode = mode;
+  currentIndex = index;
+  // （以下はそのまま）
   window.startTime = Date.now(); // ←【1】スタート時間記録
 
   const puzzle = window.puzzleData?.[mode]?.[index];
