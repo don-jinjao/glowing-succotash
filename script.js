@@ -200,7 +200,6 @@ function toggleStarInfo() {
 function backToMode() {
   document.getElementById("sheet-select").style.display = "none";
   document.getElementById("mode-select").style.display = "block";
-  showHomeAddPromptIfNeeded();
 }
 
 function selectMode(mode) {
@@ -718,12 +717,4 @@ function giveUp() {
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI(); // 称号や脳数も更新
   }, 2500);
-}
-function showHomeAddPromptIfNeeded() {
-  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
-  const isStandalone = window.navigator.standalone === true;
-  if (isIos && !isStandalone) {
-    const el = document.getElementById("add-to-home-prompt");
-    if (el) el.style.display = "block";
-  }
 }
