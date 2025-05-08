@@ -304,16 +304,17 @@ window.onload = function () {
     nampure.style.opacity = "0";
   }, 6800);
 
-  // 6. 本編表示
+    // 6. 本編表示（オープニング演出が終わった後に盤面生成・読み込み）
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-    checkForNewWeek();
-    loadAllPuzzles?.();
+
+    // ここからオープニング後に生成処理
+    loadAllPuzzles?.();       // ローカル保存データを読み込む
+    checkForNewWeek();        // 必要に応じて盤面生成
   }, 8200);
-};
 function loadAllPuzzles() {
   const week = getCurrentWeek();
   DIFFICULTIES.forEach(level => {
