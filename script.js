@@ -313,8 +313,8 @@ window.onload = function () {
 
     // ここからオープニング後に生成処理
     loadAllPuzzles?.();       // ローカル保存データを読み込む
-    checkForNewWeek();        // 必要に応じて盤面生成
-  }, 8200);
+    checkForNewWeek();        // 必要に応じて盤面}, 8200); // ← これでwindow.onloadのsetTimeoutを閉じる
+};
 function loadAllPuzzles() {
   const week = getCurrentWeek();
   DIFFICULTIES.forEach(level => {
