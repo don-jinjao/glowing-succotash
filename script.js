@@ -200,6 +200,7 @@ function toggleStarInfo() {
 function backToMode() {
   document.getElementById("sheet-select").style.display = "none";
   document.getElementById("mode-select").style.display = "block";
+  showHomeAddPromptIfNeeded();
 }
 
 function selectMode(mode) {
