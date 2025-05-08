@@ -644,8 +644,6 @@ function checkAnswer() {
     resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
     resultBox.style.display = "block";
 
-    createSparkles();
-
     setTimeout(() => {
       document.getElementById("game-screen").style.display = "none";
       document.getElementById("mode-select").style.display = "block";
@@ -664,43 +662,6 @@ function checkAnswer() {
       resultBox.style.display = "none";
     }, 3000);
   }
-}
-function createSparkles() {
-  const container = document.createElement("div");
-  container.style.position = "fixed";
-  container.style.top = 0;
-  container.style.left = 0;
-  container.style.width = "100%";
-  container.style.height = "100%";
-  container.style.pointerEvents = "none";
-  container.style.zIndex = 9999;
-  document.body.appendChild(container);
-
-  for (let i = 0; i < 80; i++) {
-    const sparkle = document.createElement("div");
-    sparkle.style.position = "absolute";
-    sparkle.style.width = "8px";
-    sparkle.style.height = "8px";
-    sparkle.style.background = "gold";
-    sparkle.style.borderRadius = "50%";
-    sparkle.style.left = `${Math.random() * 100}%`;
-    sparkle.style.top = `${Math.random() * 100}%`;
-    sparkle.style.opacity = 0;
-    sparkle.style.transform = "scale(0.5)";
-    sparkle.style.transition = "all 1s ease-out";
-    container.appendChild(sparkle);
-
-    setTimeout(() => {
-      sparkle.style.opacity = 1;
-      sparkle.style.transform = `translateY(-100px) scale(1)`;
-      sparkle.style.opacity = 0;
-    }, 10 + i * 10);
-  }
-
-  // 2秒後に削除
-  setTimeout(() => {
-    container.remove();
-  }, 2000);
 }
 function giveUp() {
   // 現在の画面非表示、諦めメッセージ表示
