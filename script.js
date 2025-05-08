@@ -258,6 +258,11 @@ function getTitleFromBrainCount(count) {
 
 window.onload = function () {
   const logo = document.getElementById("logo");
+  // ★ 星データの復元
+  const savedStars = localStorage.getItem("starsData");
+  if (savedStars) {
+    starsData = JSON.parse(savedStars);
+  }
   const title = document.getElementById("title");
   const nampure = document.getElementById("nampure");
 
