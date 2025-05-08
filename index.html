@@ -90,4 +90,11 @@
 <script src="phantom.js" defer></script>
 <script src="script.js" defer></script>
 </body>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('./sw.js')
+      .then(() => console.log('Service Worker registered'))
+      .catch(err => console.error('Service Worker registration failed:', err));
+  }
+</script>
 </html>
