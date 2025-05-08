@@ -1,7 +1,7 @@
 {
   "name": "みんなでナンプレ",
   "short_name": "ナンプレ",
-  "start_url": "./index.html",
+  "start_url": "/glowing-succotash/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#2196f3",
