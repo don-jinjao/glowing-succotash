@@ -1,7 +1,6 @@
 const DIFFICULTIES = ["easy", "normal", "hard", "toudai", "stanford"];
 let brainCount = 0;
 let starsData = {};
-let selectedCell = null; // ← これが今回の修正のカギ！
 function getCurrentWeek() {
   const now = new Date();
   const startOfYear = new Date(now.getFullYear(), 0, 1);
@@ -304,16 +303,15 @@ window.onload = function () {
     nampure.style.opacity = "0";
   }, 6800);
 
-    // 6. 本編表示（オープニング演出が終わった後に盤面生成・読み込み）
+  // 6. 本編表示
   setTimeout(() => {
     document.getElementById("opening").style.display = "none";
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI();
     checkForDataOrShowUpdateButton();
-
-    // ここからオープニング後に生成処理
-    loadAllPuzzles?.();       // ローカル保存データを読み込む
-    checkForNewWeek();        // 必要に応じて盤面}, 8200); // ← これでwindow.onloadのsetTimeoutを閉じる
+    checkForNewWeek();
+    loadAllPuzzles?.();
+  }, 8200);
 };
 function loadAllPuzzles() {
   const week = getCurrentWeek();
@@ -472,7 +470,7 @@ function startGame(mode, index) {
   // 盤面描画
   const board = document.getElementById("sudoku-board");
   board.innerHTML = "";
-  selectedCell = null;
+  let selectedCell = null;
 
   for (let r = 0; r < 9; r++) {
     const row = document.createElement("tr");
@@ -607,8 +605,7 @@ function checkAnswer() {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
     if (!cell.classList.contains("fixed")) {
-      const raw = cell.textContent.trim();
-      const input = Number(raw);
+      const input = parseInt(cell.textContent.trim());
       if (input !== solution[row][col]) {
         isCorrect = false;
         cell.style.backgroundColor = "#fdd";
@@ -619,50 +616,47 @@ function checkAnswer() {
   });
 
   const resultBox = document.getElementById("result");
-  resultBox.classList.remove("success", "fail");
-  resultBox.style.display = "block"; // ← ここを確実に追加しておく
 
   if (isCorrect) {
-  const clearTime = (Date.now() - window.startTime) / 1000;
-  let stars = 1;
-  if (clearTime <= 180) stars = 3;
-  else if (clearTime <= 600) stars = 2;
+    const clearTime = (Date.now() - window.startTime) / 1000;
+    let stars = 1;
+    if (clearTime <= 180) stars = 3;
+    else if (clearTime <= 600) stars = 2;
 
-  const key = `${mode}_${index}_v${getCurrentWeek()}`;
-  let displayStars = stars;
+    const key = `${mode}_${index}_v${getCurrentWeek()}`;
+    let displayStars = stars;
 
-  // 脳の処理
-  if (mode === "hard") {
-    if (stars === 3) {
-      brainCount += 1;
-      displayStars = 2;
+    // 脳の処理
+    if (mode === "hard") {
+      if (stars === 3) {
+        brainCount += 1;
+        displayStars = 2; // 星は2個にしておく
+      }
+    } else if (mode === "toudai" || mode === "stanford") {
+      brainCount += stars;
     }
-  } else if (mode === "toudai" || mode === "stanford") {
-    brainCount += stars;
-  }
 
-  starsData[key] = displayStars;
-  localStorage.setItem("starsData", JSON.stringify(starsData));
-  localStorage.setItem("brainCount", brainCount);
-  updateBrainUI();
-
-  resultBox.classList.add("success");
-  resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
-  resultBox.style.display = "block"; // 再表示の保険
-
-  createSparkles();
-
-  setTimeout(() => {
-    document.getElementById("game-screen").style.display = "none";
-    document.getElementById("mode-select").style.display = "block";
-    resultBox.textContent = "";
-    resultBox.style.display = "none";
+    starsData[key] = displayStars;
+    localStorage.setItem("starsData", JSON.stringify(starsData));
+    localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
-  }, 2500);
-}
+
+    resultBox.className = "success";
+    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
+    resultBox.style.display = "block";
+
+    createSparkles();
+
+    setTimeout(() => {
+      document.getElementById("game-screen").style.display = "none";
+      document.getElementById("mode-select").style.display = "block";
+      resultBox.textContent = "";
+      resultBox.style.display = "none";
+      updateBrainUI();
+    }, 2500);
 
   } else {
-    resultBox.classList.add("fail");
+    resultBox.className = "fail";
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
     resultBox.style.display = "block";
 
