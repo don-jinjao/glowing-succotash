@@ -622,42 +622,43 @@ function checkAnswer() {
   resultBox.style.display = "block"; // ← ここを確実に追加しておく
 
   if (isCorrect) {
-    const clearTime = (Date.now() - window.startTime) / 1000;
-    let stars = 1;
-    if (clearTime <= 180) stars = 3;
-    else if (clearTime <= 600) stars = 2;
+  const clearTime = (Date.now() - window.startTime) / 1000;
+  let stars = 1;
+  if (clearTime <= 180) stars = 3;
+  else if (clearTime <= 600) stars = 2;
 
-    const key = `${mode}_${index}_v${getCurrentWeek()}`;
-    let displayStars = stars;
+  const key = `${mode}_${index}_v${getCurrentWeek()}`;
+  let displayStars = stars;
 
-    // 脳の処理
-    if (mode === "hard") {
-      if (stars === 3) {
-        brainCount += 1;
-        displayStars = 2;
-      }
-    } else if (mode === "toudai" || mode === "stanford") {
-      brainCount += stars;
+  // 脳の処理
+  if (mode === "hard") {
+    if (stars === 3) {
+      brainCount += 1;
+      displayStars = 2;
     }
+  } else if (mode === "toudai" || mode === "stanford") {
+    brainCount += stars;
+  }
 
-    starsData[key] = displayStars;
-    localStorage.setItem("starsData", JSON.stringify(starsData));
-    localStorage.setItem("brainCount", brainCount);
+  starsData[key] = displayStars;
+  localStorage.setItem("starsData", JSON.stringify(starsData));
+  localStorage.setItem("brainCount", brainCount);
+  updateBrainUI();
+
+  resultBox.classList.add("success");
+  resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
+  resultBox.style.display = "block"; // 再表示の保険
+
+  createSparkles();
+
+  setTimeout(() => {
+    document.getElementById("game-screen").style.display = "none";
+    document.getElementById("mode-select").style.display = "block";
+    resultBox.textContent = "";
+    resultBox.style.display = "none";
     updateBrainUI();
-
-    resultBox.classList.add("success");
-    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
-    resultBox.style.display = "block"; // 再表示の保険
-
-    createSparkles();
-
-    setTimeout(() => {
-      document.getElementById("game-screen").style.display = "none";
-      document.getElementById("mode-select").style.display = "block";
-      resultBox.textContent = "";
-      resultBox.style.display = "none";
-      updateBrainUI();
-    }, 2500);
+  }, 2500);
+}
 
   } else {
     resultBox.classList.add("fail");
