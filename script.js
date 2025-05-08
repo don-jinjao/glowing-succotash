@@ -471,7 +471,7 @@ function startGame(mode, index) {
   // 盤面描画
   const board = document.getElementById("sudoku-board");
   board.innerHTML = "";
-  let selectedCell = null;
+  selectedCell = null;
 
   for (let r = 0; r < 9; r++) {
     const row = document.createElement("tr");
