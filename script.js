@@ -618,6 +618,7 @@ function checkAnswer() {
   });
 
   const resultBox = document.getElementById("result");
+  resultBox.classList.remove("success", "fail");
 
   if (isCorrect) {
     const clearTime = (Date.now() - window.startTime) / 1000;
@@ -643,7 +644,7 @@ function checkAnswer() {
     localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
 
-    resultBox.className = "success";
+    resultBox.classList.add("success");
     resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
     resultBox.style.display = "block";
 
@@ -658,7 +659,7 @@ function checkAnswer() {
     }, 2500);
 
   } else {
-    resultBox.className = "fail";
+    resultBox.classList.add("fail");
     resultBox.textContent = "間違いがあります。もう一度見直してね。";
     resultBox.style.display = "block";
 
