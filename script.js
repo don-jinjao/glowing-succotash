@@ -619,6 +619,7 @@ function checkAnswer() {
 
   const resultBox = document.getElementById("result");
   resultBox.classList.remove("success", "fail");
+  resultBox.style.display = "block"; // ← ここを確実に追加しておく
 
   if (isCorrect) {
     const clearTime = (Date.now() - window.startTime) / 1000;
@@ -646,7 +647,7 @@ function checkAnswer() {
 
     resultBox.classList.add("success");
     resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
-    resultBox.style.display = "block";
+    resultBox.style.display = "block"; // 再表示の保険
 
     createSparkles();
 
