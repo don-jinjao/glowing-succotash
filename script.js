@@ -606,7 +606,8 @@ function checkAnswer() {
     const row = parseInt(cell.dataset.row);
     const col = parseInt(cell.dataset.col);
     if (!cell.classList.contains("fixed")) {
-      const input = parseInt(cell.textContent.trim());
+      const raw = cell.textContent.trim();
+      const input = Number(raw);
       if (input !== solution[row][col]) {
         isCorrect = false;
         cell.style.backgroundColor = "#fdd";
@@ -631,7 +632,7 @@ function checkAnswer() {
     if (mode === "hard") {
       if (stars === 3) {
         brainCount += 1;
-        displayStars = 2; // 星は2個にしておく
+        displayStars = 2;
       }
     } else if (mode === "toudai" || mode === "stanford") {
       brainCount += stars;
