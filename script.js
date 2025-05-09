@@ -617,42 +617,42 @@ function checkAnswer() {
   const resultBox = document.getElementById("result");
 
   if (isCorrect) {
-  const clearTime = (Date.now() - window.startTime) / 1000;
-  let stars = 1;
-  if (clearTime <= 180) stars = 3;
-  else if (clearTime <= 600) stars = 2;
+    const clearTime = (Date.now() - window.startTime) / 1000;
+    let stars = 1;
+    if (clearTime <= 180) stars = 3;
+    else if (clearTime <= 600) stars = 2;
 
-  const key = `${mode}_${index}_v${getCurrentWeek()}`;
-  let displayStars = stars;
+    const key = `${mode}_${index}_v${getCurrentWeek()}`;
+    let displayStars = stars;
 
-  if (mode === "hard") {
-    if (stars === 3) {
-      brainCount += 1;
-      displayStars = 2;
+    // 脳の処理
+    if (mode === "hard") {
+      if (stars === 3) {
+        brainCount += 1;
+        displayStars = 2; // 星は2個にしておく
+      }
+    } else if (mode === "toudai" || mode === "stanford") {
+      brainCount += stars;
     }
-  } else if (mode === "toudai" || mode === "stanford") {
-    brainCount += stars;
-  }
 
-  starsData[key] = displayStars;
-  localStorage.setItem("starsData", JSON.stringify(starsData));
-  localStorage.setItem("brainCount", brainCount);
-  updateBrainUI();
-
-  const resultBox = document.getElementById("result");
-  alert(resultBox ? "✅ resultBox OK（取得成功）" : "❌ resultBox is NULL（存在していない）");
-
-  resultBox.className = "success";
-  resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
-  resultBox.style.display = "block";
-
-  setTimeout(() => {
-    document.getElementById("game-screen").style.display = "none";
-    document.getElementById("mode-select").style.display = "block";
-    resultBox.textContent = "";
-    resultBox.style.display = "none";
+    starsData[key] = displayStars;
+    localStorage.setItem("starsData", JSON.stringify(starsData));
+    localStorage.setItem("brainCount", brainCount);
     updateBrainUI();
-  }, 2500);
+
+    resultBox.className = "success";
+    resultBox.textContent = `素晴らしい、あなたは天才だ！⭐️${displayStars}つ獲得！`;
+    resultBox.style.display = "block";
+
+    createSparkles();
+
+    setTimeout(() => {
+      document.getElementById("game-screen").style.display = "none";
+      document.getElementById("mode-select").style.display = "block";
+      resultBox.textContent = "";
+      resultBox.style.display = "none";
+      updateBrainUI();
+    }, 2500);
 
   } else {
     resultBox.className = "fail";
@@ -664,6 +664,43 @@ function checkAnswer() {
       resultBox.style.display = "none";
     }, 3000);
   }
+}
+function createSparkles() {
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.top = 0;
+  container.style.left = 0;
+  container.style.width = "100%";
+  container.style.height = "100%";
+  container.style.pointerEvents = "none";
+  container.style.zIndex = 9999;
+  document.body.appendChild(container);
+
+  for (let i = 0; i < 80; i++) {
+    const sparkle = document.createElement("div");
+    sparkle.style.position = "absolute";
+    sparkle.style.width = "8px";
+    sparkle.style.height = "8px";
+    sparkle.style.background = "gold";
+    sparkle.style.borderRadius = "50%";
+    sparkle.style.left = `${Math.random() * 100}%`;
+    sparkle.style.top = `${Math.random() * 100}%`;
+    sparkle.style.opacity = 0;
+    sparkle.style.transform = "scale(0.5)";
+    sparkle.style.transition = "all 1s ease-out";
+    container.appendChild(sparkle);
+
+    setTimeout(() => {
+      sparkle.style.opacity = 1;
+      sparkle.style.transform = `translateY(-100px) scale(1)`;
+      sparkle.style.opacity = 0;
+    }, 10 + i * 10);
+  }
+
+  // 2秒後に削除
+  setTimeout(() => {
+    container.remove();
+  }, 2000);
 }
 function giveUp() {
   // 現在の画面非表示、諦めメッセージ表示
@@ -680,4 +717,12 @@ function giveUp() {
     document.getElementById("mode-select").style.display = "block";
     updateBrainUI(); // 称号や脳数も更新
   }, 2500);
+}
+function showHomeAddPromptIfNeeded() {
+  const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+  const isStandalone = window.navigator.standalone === true;
+  if (isIos && !isStandalone) {
+    const el = document.getElementById("add-to-home-prompt");
+    if (el) el.style.display = "block";
+  }
 }
