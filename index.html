@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
   <link rel="apple-touch-icon" href="icon-apple.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>みんなのナンプレ｜脳トレ会</title>
-  <link rel="manifest" href="manifest.json">
+　<link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#2196f3">
   <meta name="description" content="誰でも無料で楽しめるナンプレ（数独）ゲーム。難易度別、毎週更新で脳トレにも最適。スマホ対応で広告も少なめ！" />
   <meta name="keywords" content="ナンプレ,数独,無料,脳トレ,パズル,ゲーム,脳トレ会" />
@@ -54,27 +52,10 @@
     <p id="update-loading" style="display:none; font-weight:bold;">更新中…しばらくお待ちください</p>
   </div>
 
-<!-- スタンフォード脳ボタン -->
-<button id="stanford-btn" disabled onclick="selectMode('stanford')">
-  スタンフォード脳（🧠50個以上）
-</button>
-
-<!-- ホーム画面追加案内バナー -->
-<div id="add-to-home-prompt" style="
-  display: none;
-  background: #fff8e1;
-  border: 1px solid #ffe082;
-  padding: 0.8em;
-  margin-top: 1em;
-  font-size: 0.95em;
-  text-align: center;
-  border-radius: 6px;
-  line-height: 1.6em;
-">
-  これをアプリ化するには：<br>
-  Safariの「<strong>共有ボタン（□に↑）</strong>」から<br>
-  「<strong>ホーム画面に追加</strong>」を選んでください。
-</div>
+  <button id="stanford-btn" disabled onclick="selectMode('stanford')">スタンフォード脳（🧠50個以上）</button>
+  <p id="stanford-note" style="color: #d32f2f; font-size: 0.95em;">
+    ※🧠50個以上で解放されます
+  </p>
 
   
   <button id="star-info-btn" onclick="toggleStarInfo()">⭐️の評価基準</button>
