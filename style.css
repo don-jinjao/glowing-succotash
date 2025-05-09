@@ -135,6 +135,7 @@ button:disabled {
   color: #2e7d32;
   font-weight: bold;
   font-size: 1.5em;
+  display: block;
 }
 #result.fail {
   color: #c62828;
